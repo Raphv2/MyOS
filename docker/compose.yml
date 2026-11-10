@@ -1,0 +1,34 @@
+# Environnement de test local (voir docker/README.md). Identifiants factices, locaux uniquement.
+name: myos
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: file_explorer
+      MARIADB_USER: myos
+      MARIADB_PASSWORD: myos-local-dev
+      MARIADB_ROOT_PASSWORD: myos-local-root
+    volumes:
+      - ./.data/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      retries: 20
+
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../dist:/var/www/html
+      - ./.data/img:/var/www/html/img
+      # .env AU-DESSUS du dossier public, comme recommandé en prod
+      - ./.data/env:/var/www/.env:ro
+
+volumes:
+  dbdata:

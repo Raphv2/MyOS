@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MyOS</title>
+  <meta name="description" content="MyOS — le portfolio de Raphaël Gosset, développeur fullstack, sous la forme d'un ordinateur rétro.">
+  <meta name="theme-color" content="#0e0e0e">
+  <link rel="icon" type="image/png" href="/img/logo_start_menu_os.png">
+</head>
+<body>
+  <!-- Cadre TV (effet cathodique + boîtier) -->
+  <img class="tele" src="/img/tele_catho.png" alt="" aria-hidden="true">
+  <img class="tele2" src="/img/telecool.png" alt="" aria-hidden="true">
+
+  <div class="buttons">
+    <img class="power_button" id="power_button" src="/img/power_button.png" alt="Allumer / éteindre" role="button" tabindex="0">
+    <img class="logo_myos" src="/img/logo_myos.png" alt="MyOS">
+    <img class="source_button" id="source_button" src="/img/source_button.png" alt="Plein écran" role="button" tabindex="0">
+    <img class="fullscreen_postIt" src="/img/fullscreen.png" alt="" aria-hidden="true">
+  </div>
+
+  <div id="app"></div>
+
+  <noscript>
+    <p class="noscript">MyOS a besoin de JavaScript pour démarrer.</p>
+  </noscript>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

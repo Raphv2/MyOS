@@ -1,0 +1,52 @@
+# MyOS v2 — public_html/.htaccess (Hostinger / Apache / LiteSpeed)
+
+DirectoryIndex index.html
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Anciennes URLs : index.php?page=accueil → /?page=accueil (la query est conservée)
+  RewriteRule ^index\.php$ / [R=301,L,QSA]
+
+  # Fichiers cachés (.env, .git, .htaccess…), sauf .well-known (certificat SSL)
+  RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+  # Internes de l'API
+  RewriteRule ^api/_(lib|storage)(/|$) - [F,L]
+
+  # Sauvegardes, dumps, logs, dépendances : jamais servis
+  RewriteRule \.(zip|tar|gz|7z|rar|sql|log|bak|old|swp|ini|lock)$ - [F,L,NC]
+  RewriteRule ^(error_log\.txt|package(-lock)?\.json|composer\.(json|lock))$ - [F,L,NC]
+  RewriteRule ^(node_modules|vendor|src|scripts|docker)(/|$) - [F,L,NC]
+
+  # Aucun script exécutable dans les médias
+  RewriteRule ^img/.*\.(php\d?|phtml|phar|cgi|pl|py|sh)$ - [F,L,NC]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+  # HTML et API : toujours frais. Médias : une semaine.
+  <FilesMatch "\.(html|php|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(png|jpe?g|gif|webp|svg|glb|mp4|webm|mp3|ogg|wav|pdf|woff2?)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType model/gltf-binary .glb
+  AddType text/markdown .md
+  AddType application/javascript .mjs
+  AddCharset utf-8 .txt .md .json .js .mjs .css .html
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/markdown application/javascript application/json image/svg+xml
+</IfModule>

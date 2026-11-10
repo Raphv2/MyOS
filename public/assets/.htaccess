@@ -1,0 +1,4 @@
+# Fichiers générés par Vite (nom avec empreinte) : cache long.
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>

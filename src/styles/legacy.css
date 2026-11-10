@@ -1,0 +1,2256 @@
+html {
+    scroll-behavior: smooth;
+
+    user-select: none;
+
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Press Start 2P', sans-serif;
+    color: #efefef;
+    width: 100%;
+    background-color: #0e0e0e;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+
+
+.transition-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    z-index: 9997; /* Ensure the image is on top */
+    pointer-events: none; /* Make sure the image doesn't block interactions */
+}
+
+html.is-animating .transition-video {
+    opacity: 1;
+}
+
+.custom_cursor{
+    position: relative;
+    background-image: url("/img/Cursor101.png");
+    background-size: 100% 100%;
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    z-index: 9991;
+}
+
+.view_name_container{
+    position: absolute;
+    display: grid;
+    width: 10vw;
+    height: 3vh;
+    font-size: 0.5vw;
+    top: -110%; /* Aligner avec le haut de .custom_cursor */
+    left: 0; /* Aligner avec la gauche de .custom_cursor */
+    background-color: #212121;
+    pointer-events: none;
+    border-radius: 5px
+}
+
+.view_name{
+    display: grid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.buttons {
+    
+    padding: 0;
+    margin: 0; 
+    width: 100%;
+    height: 7%;
+    position: fixed;
+    bottom: 0; 
+    z-index: 9999;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.power_button{
+
+
+    margin: 0;
+    padding-top: 0.8%;
+    width:6vw;
+    min-width: 60px;
+    height: auto;
+    position: fixed;
+    right: 2%;
+    cursor: pointer;
+}
+
+.source_button{
+
+    
+    margin: 0;
+    width:1.5%;
+    min-width: 20px;
+    height: auto;
+    position: absolute;
+    left: 2%;
+    cursor: pointer;
+    top: 40%;
+    
+}
+
+.fullscreen_postIt{
+    margin: 0;
+    width:9%;
+    min-width: 20px;
+    height: auto;
+    position: absolute;
+    left: 3%;
+    cursor: none;
+    top: -30%;
+    transform: rotate(9deg);
+}
+
+
+
+.logo_myos{
+
+    padding: 0;
+    margin: 0;
+    padding-top: 0.8%;
+    width:3.5vw;
+    min-width: 50px;
+    height: auto;
+    position: fixed;
+    
+}
+
+.tele2{
+    
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9998;
+    pointer-events: none;
+    
+
+}
+
+@keyframes lightUp {
+    0% { filter: brightness(1.1); }
+    50% { filter: brightness(1.12); }
+    100% { filter: brightness(1.1); }
+}
+
+
+
+
+.tele{
+
+    padding: 0px;
+    margin: 0px;
+    width:86vw;               /* Largeur de 60% de la largeur de la fenêtre */
+    height: 77vh;              /* Hauteur de 40% de la hauteur de la fenêtre */
+           /* Centre la div horizontalement */
+    position: absolute;        /* Permet de la positionner précisément */
+    top: 46%;                  /* Positionne la div au centre verticalement */
+    left: 50.5%;                 /* Positionne la div au centre horizontalement */
+    transform: translate(-50%, -50%);  /* Ajuste la div pour qu'elle soit parfaitement centrée */
+    
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 1;
+    animation: lightUp 2s infinite alternate;
+    
+}
+
+
+.transparent-video{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: 9996;
+    pointer-events: none;
+    cursor: none;
+    margin: 0;
+    padding: 0;
+    opacity: 5%;
+    animation: lightUp 2s infinite alternate;
+}
+
+#start {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.start.hidden {
+    display: none;
+}
+
+#end {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.end.hidden {
+    display: none;
+}
+
+
+h1{
+
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 5vh;
+    white-space: nowrap;
+    max-height: 10%;
+    min-height: 10%;
+    display: flex;
+}
+
+header {
+
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    z-index: 9995;
+    gap: 5%;
+}
+
+a {
+    font-style: normal;
+    text-decoration: none;
+}
+
+header * {
+    padding: 0;
+    margin: 0;
+    margin-top: 20vh;
+    transition-duration: 250ms;
+}
+
+a{
+    color: #FFFFFF;
+    font-size: 1.5vh;
+    white-space: nowrap;
+    max-height: 100%;
+   
+}
+
+
+
+footer {
+    background-color: transparent;
+    top: 80%;
+    padding: 10px;
+    max-height: 10%;
+    min-height: 10%;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 0; 
+    white-space: nowrap;
+}
+
+
+.hidden {
+  opacity: 0;
+}
+
+.fade-in {
+  opacity: 1;
+
+}
+
+.start_menu {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 10vh;
+    white-space: nowrap;
+    max-height: 10%;
+    min-height: 10%;
+    display: flex;
+    animation: lightUp 2s infinite alternate;
+}
+
+.start_menu a {
+    text-decoration: none;
+    color: #FFFFFF; 
+    padding: 10px 20px;
+    margin: 5px 0;
+    text-align: center;
+    animation: lightUp 2s infinite alternate;
+    
+}
+.screen {
+    width:84.8vw;               /* Largeur de 60% de la largeur de la fenêtre */
+    height: 77vh;              /* Hauteur de 40% de la hauteur de la fenêtre */
+              /* Centre la div horizontalement */
+    position: absolute;        /* Permet de la positionner précisément */
+    top: 46%;                  /* Positionne la div au centre verticalement */
+    left: 50.2%;                 /* Positionne la div au centre horizontalement */
+    transform: translate(-50%, -50%);  /* Ajuste la div pour qu'elle soit parfaitement centrée */
+    overflow: hidden;            /* Si le contenu dépasse, ajoute des barres de défilement */
+    cursor: none;
+    background-image: url('/img/screenBackground2.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    
+    animation: lightUp 2s infinite alternate;
+    
+}
+
+.screen_start {
+    width:86vw;               /* Largeur de 60% de la largeur de la fenêtre */
+    height: 77vh;              /* Hauteur de 40% de la hauteur de la fenêtre */
+/* Centre la div horizontalement */
+    position: absolute;        /* Permet de la positionner précisément */
+    top: 46%;                  /* Positionne la div au centre verticalement */
+    left: 50.5%;                 /* Positionne la div au centre horizontalement */
+    transform: translate(-50%, -50%);  /* Ajuste la div pour qu'elle soit parfaitement centrée */
+    overflow: hidden;            /* Si le contenu dépasse, ajoute des barres de défilement */
+    cursor: none;
+    background-image: url('/img/screenBackground2.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    animation: lightUp 2s infinite alternate;
+    
+}
+
+.start_myos_video {
+    width: 100%;  /* Largeur totale */
+    height: 100%; /* Hauteur totale */
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover; /* Permet d'ajuster la vidéo */
+    z-index: 9900;
+    opacity: 1;
+    animation: end 2.2s ease-in-out forwards;
+    pointer-events: none;
+}
+
+@keyframes end {
+    0%{
+        opacity: 1;
+    }
+    99%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+
+
+
+.menu_item {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  /* Centrer l'image et le texte */
+
+    width: 8vw;   /* Largeur réactive en fonction de la largeur de la fenêtre */
+    height: 8vh;  /* Hauteur réactive en fonction de la hauteur de la fenêtre */
+
+    padding: 0;
+    box-sizing: border-box; /* Inclut le padding dans la taille totale */
+    animation: lightUp 2s infinite alternate;
+}
+
+
+.menu_item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.5vw;
+}
+
+.menu_item a {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  /* Centrer l'image et le texte dans le lien */
+    width: 100%;
+    height: 100%;  /* S'assure que le lien prend toute la taille du parent */
+    text-shadow: 
+    1px 1px 0px #212121,
+    -1px -1px 0px #212121,
+        1px -1px 0px #212121,
+            -1px 1px 0px #212121;
+    text-decoration: none;
+    font-size: 0.45vw;  /* Ajuste la taille de la police en fonction de la largeur de la fenêtre */
+    pointer-events: none;
+    color: #efefef;
+}
+
+.menu_item img {
+    width: 50%; /* 20% de la largeur de la fenêtre */
+    height: auto; /* Garde le ratio de l'image */
+    object-fit: contain;  /* L'image s'adapte sans déformation */
+    margin-bottom: 1vh;
+    pointer-events: none;
+}
+
+.inner_folder .menu_item{
+    position: static;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column;
+    width: 22%; /* La largeur du dossier */
+    height: 30%; /* La hauteur du dossier */
+    text-align: center; 
+    border: 1px solid rgba(96, 96, 96, 0.473); 
+    border-radius: 5px; 
+    flex-shrink: 0; 
+
+    padding: 0;
+    margin: 0;
+}
+
+.inner_folder .menu_item img{
+    height: 60%; /* L'image prend 70% de la hauteur de .folder */
+    width: auto; /* La largeur s'ajuste automatiquement en gardant les proportions */
+    margin: 5%; /* Espacement entre l'image et le texte */
+    pointer-events: none;
+}
+
+.inner_folder .menu_item a{
+    font-size: clamp(0.1vw, 0.6vw, 0.75vw);
+    width: 80%;
+    line-height: 1; /* Ajuste l'interligne pour bien centrer */
+    text-align: center; /* Centre le texte dans sa zone */
+    margin: 0; 
+    
+    overflow: hidden; /* Cache le texte si débordement */
+    text-overflow: clip; /* Ajoute "..." si le texte est trop long */
+    white-space: normal; /* Empêche de passer à la ligne */
+    pointer-events: none;
+}
+
+
+
+
+.tv_off{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+
+
+
+
+.landing-start-container {
+    margin-top: 1vh;
+    text-align: center;
+    background-color: #C5292B;
+    width: 50%;
+    height: 4vh;
+    font-size: 50%;
+    box-shadow: -2px -2px 0 2px #D46A6C; 
+    position: relative; /* pour l’::after */
+}
+
+/* Bord droit + bas simulés en vert, plats (pas en angle) */
+.landing-start-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 2px);  /* pour éviter l’angle avec le bord gauche */
+    height: calc(100% - 2px); /* pour éviter l’angle avec le bord haut */
+    box-shadow: 2px 2px 0 2px #9F2426; 
+    
+    /*border-bottom: solid 5px #9F2426;*/
+    /*border-right: solid 5px #9F2426;*/
+    pointer-events: none; /* pour éviter les soucis de clic */
+}
+
+
+.landing-start-text:hover{
+    background-color: #fc4141;
+
+   
+}
+
+.landing-start-text {
+    background-color: #C5292B;
+    margin: 0;
+    padding: 0;
+
+    /* SUPPRIMER : position absolute + transform */
+    /* position: absolute; */
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+
+    width: 100%;
+    height: 100%;
+
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+
+.start_button {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border: 0;
+    padding: 0;
+    background: none;
+    color: #efefef;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    cursor: none;
+}
+
+
+.landing-profile-container {
+    position: relative; /* Gardez cette propriété pour que les éléments internes soient positionnés relativement */
+    display: flex;
+    flex-direction: column; /* Assurez-vous que cela est défini pour empiler les éléments verticalement */
+    align-items: center; /* Centre les éléments horizontalement */
+    margin-bottom: 10px; /* Ajoute un espace entre le profil et le bouton */
+    gap: 10px; /* Ajoute un espace entre les enfants pour éviter le chevauchement */
+}
+.container_profile {
+    position: fixed;
+    top: 50%;        /* centre verticalement */
+    left: 50%;       /* centre horizontalement */
+    transform: translate(-50%, -50%); /* centre exact en X et Y */
+    background-color: #EFEFEF;
+    min-height: 45vh;
+height: auto;
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    color: #212121;
+    border-radius: 5px;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgba(134, 133, 133);
+    animation: fadeInAndOut 3.5s ease-in-out forwards;
+}
+
+
+@keyframes blinker {
+    0%{
+        bottom: -60vh;
+    }
+    80%{
+        bottom: -60vh;
+    }
+    100%{
+        bottom: 50%;
+    }
+}
+
+
+
+
+/* Conteneur de tout le profil */
+#raph_dropdown {
+    flex-direction: column;
+    align-items: center; /* centre horizontalement */
+    padding: 2vh 1vw;
+    overflow: hidden;
+    width: 29vw;
+    height: 23vh;
+}
+
+.raph_name {
+    font-size: 1.5vh;
+}
+
+
+/* Image de profil */
+.profile_image_contener {
+    width: 10vw;
+    height: 10vw;
+    background-image: url("/img/profile.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 2vh;
+    border: 5px solid #EFEFEF;
+    box-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 1),
+        -1px -1px 0px rgb(130, 130, 130),
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(130, 130, 130);
+    margin-bottom: 1vh; /* espace sous l'image */
+}
+
+.profile_image_dropdown{
+    width: 5vw;
+    height: 5vw;
+    background-image: url("/img/profile.png");
+    background-size: cover;
+    background-position: center;
+    
+    border: 5px solid #EFEFEF;
+    box-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 1),
+        -1px -1px 0px rgb(130, 130, 130),
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(130, 130, 130);
+    margin-bottom: 1vh; /* espace sous l'image */
+}
+
+/* Nom du profil */
+.profile_name {
+    font-size: 1vw;
+    text-align: center;
+    margin: 0 0 0.5vh 0; /* marge sous le nom */
+    margin-bottom: 1vh; /* espace sous l'image */
+}
+
+/* Description du profil */
+.profile_subtitle {
+    font-size: 0.5vw;
+    text-align: center; /* ou left si tu préfères */
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+
+.rectangular-bar {
+    position: fixed;          
+    bottom: -2vw; /* Cachée sous l'écran */
+    left: 50%;        
+    width: 80%;              
+    height: 8%;             
+    background-color: #EFEFEF; 
+
+    border-radius: 5px;
+    display: flex;
+    gap: 0.5vw;  
+    align-items: center;
+    padding: 0 1vw;
+    z-index: 50;
+    overflow: hidden;
+    
+    box-shadow: 
+    
+    1px 1px 0px rgba(0, 0, 0, 1),
+    -1px -1px 0px rgb(130, 130, 130);
+    transform: translateX(-50%); /* Centrage */
+    opacity: 0.5; /* Semi-transparent pour indiquer sa présence */
+    
+    transition: bottom 0.3s ease-out, opacity 0.3s ease-out; /* Animation fluide */
+    animation: fadeInAndOut 0.5s ease-in-out forwards;
+
+}
+
+.rectangular-bar:hover {
+    bottom: 0; /* Remonte à sa position normale */
+    opacity: 1; /* Devient complètement visible */
+}
+
+.rectangular-bar-top {
+    position: fixed;          
+    top: 0.4vh;             
+    left: 0;                  
+    width: 100%;              
+    height: 3%;             
+    background-color: #EFEFEF; 
+    border-bottom: 0.3vh solid #212121;
+    border-top: 0.3vh solid #EFEFEF;
+
+    display: flex;
+    gap: 0.5vw;  
+    align-items: center;
+    justify-content: space-between; /* Écarte les éléments aux extrémités */
+  
+    z-index: 50;
+
+    opacity: 0;
+
+    animation: fadeInAndOut 1s ease-in-out forwards;
+    
+    box-shadow: 
+    
+    1px 1px 0px rgba(0, 0, 0, 1),
+    -1px -1px 0px rgb(130, 130, 130);
+}
+
+
+.screen_start .rectangular-bar-top {
+
+    animation: fadeInAndOut 3s ease-in-out forwards;
+    opacity: 0;
+    
+
+}
+
+@keyframes fadeInAndOut {
+    0% {
+        opacity: 0;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+
+}
+
+.logo-os {
+    position: absolute;
+    width: 1.5%; 
+    height: auto;
+    left: 1vw;
+    top: 55%;
+    transform: translateY(-50%);
+}
+
+
+.datetime {
+    position: absolute;
+    right: 0; /* Distance depuis le bord droit */
+    top: 55%;
+    transform: translateY(-50%);
+    width: 29vh;
+    height: auto;
+
+    color: #212121;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: right;
+    
+
+    line-height: 1.1; /* Espacement entre l'heure et la date */
+    pointer-events: none; /* Rendre la div insensible aux interactions */
+    font-size: 55%;
+    
+}
+
+
+.name_container {
+    position: absolute;
+    left: 10vw;
+
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9vw;
+    height: 95%;
+   
+    padding-left: 0.5vw;
+    color: #212121;
+  
+    display: flex;
+    flex-direction: row;
+   
+    align-items: center;
+    text-align: left;
+    background-color: #efefef;
+    box-shadow: 
+    
+    inset 1px 0px 0px rgba(0, 0, 0, 1),
+    inset -1px 0px 0px rgb(130, 130, 130);
+
+    line-height: 1.1; 
+
+    font-size: 50%;
+
+    
+}
+
+#name_container_button2{
+    left: 4.5vw;
+    width: 5vw
+}
+
+.arrow_slide{
+    position: absolute;
+    background-image: url("/img/arrow_slide.png");
+    background-size: cover;
+    height: 0.6vw;
+    width: 0.6vw;
+    object-fit: fill;
+    right: 0.2vw;
+}
+
+.full_screen{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 2%;
+    height: 15%;
+    background-color: #EFEFEF;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    border: 2px solid #212121;
+    border-left: none;
+
+
+}
+
+.full_screen .dropdown-content {
+    
+    left: 0; /* Aligné avec le bouton */
+    top: -10%;
+    width: 10vw;
+    height: 110%;
+
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+    overflow: hidden;
+    
+}
+
+#exit_fullscreen{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 40%;
+    background-color: #212121;
+    border-radius: 5px;
+    pointer-events: auto;
+    box-shadow: inset -5px -5px 3px rgba(0, 0, 0, 0.5), inset 5px 5px 3px #ffffff66;
+}
+
+
+#exit_fullscreen_name{
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 20%;
+    font-size: 60%;
+    color: #212121;
+    text-align: center;
+}
+
+
+.exit_fullscreen_container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+}
+
+.dropdown_menu {
+    height: 20vh;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #212121;
+    padding: 10px;
+    width: 20vw;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+
+/*.dropdown_menu .profile_image_contener{*/
+/*    position: absolute;*/
+/*    width: 5vw;*/
+/*    height: 5vw;*/
+/*}*/
+
+.dropdown_menu.show  {
+    display: block;
+}
+
+.dropdown_menu.show .arrow_slide {
+    transform: rotate(-135deg);
+    margin-bottom: 0.8vh;
+}
+
+.start-menu {
+    display: flex;
+    align-items: center; /* Aligne l’image et le texte verticalement */
+    justify-content: flex-start; /* Aligne le contenu à gauche */
+    width: 7.5vw;
+    height: 5.5vh;
+
+
+    margin-left: 1vw;
+    margin-top: 0.2vh;
+    margin-right: 1vw;
+    box-shadow: 
+    
+    inset 1.5px 1.5px 0px rgba(0, 0, 0, 1),
+    inset -1.5px -1.5px 0px rgb(130, 130, 130);
+
+ 
+    flex-direction: row;
+    padding: 0 0.5vw; /* Ajoute un peu d'espace intérieur */
+    animation: lightUp 2s infinite alternate;
+    cursor: none;
+    
+
+}
+
+.start-menu:hover{
+    box-shadow: 
+    
+    inset 1.5px 1.5px 0px rgba(0, 0, 0, 1),
+    inset -1.5px -1.5px 0px rgb(130, 130, 130),
+    -2px -2px 0px rgba(0, 0, 0, 1);
+    margin-top: 4px;
+}
+
+
+
+
+.start-menu-logo {
+    width: 3vw;
+    height: auto;
+    margin-right: 0.5vw; /* Espace entre l’image et le texte */
+    margin-top: 0.25vw; /* Espace entre l’image et le texte */
+    
+}
+
+.start-menu-text {
+    font-size: 1vw; /* Taille du texte relative à l’écran */
+    font-weight: bold;
+    color: #212121;
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+
+/* Style du menu déroulant */
+.dropdown-content {
+    display: none; /* Caché par défaut */
+    position: absolute;
+    left: 0vw; /* Aligné avec le bouton */
+    top: 100%; /* Juste en dessous du bouton */
+    background-color: #EFEFEF;
+    border: 1px solid #212121;
+
+    width: 20vw;
+    height: 25vh;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+    overflow: hidden;
+}
+
+#shutdown {
+    color: #212121;
+    position: absolute;
+    bottom: 5%; /* Distance du bas */
+    right: 6.5%; /* Distance de la droite */
+    font-size: 0.5vw;
+    height: 1.5vw;
+    width: 1.5vw;
+    padding: 0.3vw;
+    background-color: #C5292B;
+    box-shadow: 
+    -2px -2px 0 2px #D46A6C,
+    2px 2px 0 2px #9F2426;
+
+
+}
+
+#shutdown img {
+    width: 60%;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+#shutdown:hover{
+
+    background-color: #fc4141;
+       
+    
+}
+
+
+
+/* Animation d'apparition */
+.dropdown-content.show {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    
+   
+}
+
+.recent_files {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: flex-start ;
+    justify-content: flex-start ;
+    
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    height: 60%;
+    width: 80%;
+    
+    background-color: #FFFFFF;
+    overflow: hidden;
+    padding: 10px;
+    row-gap: 1vh;
+    column-gap: 0.5vw;
+    overflow-y: hidden;
+    box-shadow: 
+        inset 1px 0px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgba(134, 133, 133);
+}
+
+
+
+.recent_files .menu_item {
+    display: flex;
+    position: static;
+    flex-direction: column;
+    
+    
+    width: 30%; /* Largeur du dossier */
+    height: 30%; /* Hauteur du dossier */
+    border: 1px solid rgba(161, 161, 161, 0.473);
+    border-radius: 0px;
+    flex-shrink: 0;
+    text-align: left;
+    /* Positionner en haut à gauche */
+    margin: 0; /* Supprime tout espace autour */
+}
+
+.recent_files .menu_item:hover {
+    background-color: #2121212d;
+    padding: 0.01vw;
+}
+
+.recent_files .menu_item img{
+    width: 50%;
+    height: auto;
+    margin: 0;
+}
+
+.recent_files .menu_item a {
+    color: #212121;
+
+    /* Aligner le texte à gauche */
+    text-align: left;
+
+    /* Empêcher le texte de passer à la ligne suivante */
+    white-space: nowrap;
+    text-shadow: none;
+
+    /* Ajouter des points de suspension si le texte dépasse */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 8px;
+    padding: 10px;
+    /* Assurez-vous que l'élément prend la largeur complète de son conteneur */
+    width: 80%;
+    height: 40%;
+}
+
+
+.application, .shortcut {
+    min-width: 3vw;
+    min-height: 3vw; /* Taille minimale, mais la div peut grandir */
+    margin-top: 0.2vh;
+    margin-left: 0.1vw;
+
+    z-index: 1;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain; /* L'image reste entière */
+}
+
+
+  #id_Home_icon{
+    
+    background-image: url('/img/directory.png'); /* Chemin de l'image */
+    background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la zone */
+    background-repeat: no-repeat; /* Empêche la répétition de l'image */
+    background-position: center; /* Centre l'image dans la zone */
+  }
+  
+  /* Styles pour la div carrée */
+  .new-square {
+    resize: both;
+    position: relative; /* Permet de positionner l'élément indépendamment des autres */
+    top: 50%; /* Centrage vertical */
+    left: 50%; /* Centrage horizontal */
+    margin-top: 0; /* Plus besoin de margin-top */
+    transition: all 0.05s ease; /* Gère les animations si nécessaire */
+    background-color: #EFEFEF; /* Exemple : pour tester */
+    z-index: 1;
+   
+    box-shadow: 5px 5px 0px rgb(21, 21, 21); 
+    color: #212121;
+    border: 2px solid #212121;
+  
+    border-radius: 5px;
+    will-change: transform;
+
+    
+  }
+   .border-inner-contener {
+    width: calc(100% - 1.2vw); /* Taille légèrement plus petite que le parent */
+    height: calc(90% - 1.6vh); /* Taille légèrement plus petite que le parent */
+
+    background-color: #212121;
+    position: absolute; /* Permet de positionner cet élément indépendamment */
+    top: 55%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -51.2%); /* Assure le centrage parfait */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;  
+    pointer-events:all;
+  
+    box-shadow: 
+    inset 1px 1px 0px rgba(0, 0, 0, 1),
+    inset -1px -1px 0px rgb(134, 133, 133);
+    z-index: 1; /* Assure que cette div est en dessous des autres enfants, si nécessaire */
+
+
+  }
+
+  #inner-application1{
+    background-color: #212121;
+  }
+  
+.border-inner-contener .inner_contener{
+    
+    
+        width: calc(100% - 1.5vw); /* Taille légèrement plus petite que le parent */
+        height: calc(100% - 2vh); /* Taille légèrement plus petite que le parent */
+        margin: 0.5vw ;
+        justify-content: center;
+        overflow: auto;     
+        overflow-y: hidden;
+
+        z-index: 1; /* Assure que cette div est en dessous des autres enfants, si nécessaire */
+        align-items: center; /* Centre verticalement */
+      
+}
+
+.scroll_bar {
+    position: absolute; /* Position absolue dans le conteneur parent */
+    top: 0; /* Commence en haut */
+    right: 0; /* Alignée à droite */
+    width: 10px; /* Largeur de la barre de défilement */
+    height: 100%; /* Prend toute la hauteur du conteneur parent */
+    background-color: #f0f0f0; /* Couleur de fond de la barre */
+    margin: 0.2vw;
+  }
+  
+  /* Curseur de la barre de défilement */
+  .scroll_thumb {
+    position: absolute; /* Position absolue à l'intérieur de la scrollbar */
+    top: 0; /* Commence en haut */
+    width: 100%; /* Occupe toute la largeur de la scrollbar */
+    height: 50px; /* Hauteur initiale du curseur */
+    background-color: #333; /* Couleur du curseur */
+    border-radius: 0; /* Pas d'arrondi, style angulaire */
+
+    padding: 10px;
+  }
+
+  .minus_button,
+.full_screen_btn,
+.close-btn {
+    position: absolute;
+    width: 0.6vw;
+    height: 0.6vw;
+    display: flex; /* Centre le contenu */
+    justify-content: center;
+    align-items: center;
+  
+    border-radius: 100%; /* Ajoute des coins arrondis */
+    transition: background-color 0.3s ease; /* Transition pour hover */
+    box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.5), inset 3px 3px 3px #ffffff66;
+    
+}
+
+.minus_button {
+    
+    background-color: #00ff22;
+    right: 4vw;
+    pointer-events: all;
+    box-shadow: 
+    
+    inset -1px -1px 3px rgba(0, 0, 0, 0.5),
+    inset 1px 1px 3px #ffffff66
+}
+
+.full_screen_btn {
+    background-color: #ffcc00;
+    right: 2.5vw;
+    pointer-events: all;
+    box-shadow: 
+    
+    inset -1px -1px 3px rgba(0, 0, 0, 0.5),
+    inset 1px 1px 3px #ffffff66
+    
+}
+
+.close-btn {
+    background-color: #ff0000;
+    right: 1vw;
+    pointer-events: all;
+    box-shadow: 
+    inset -1px -1px 3px rgba(0, 0, 0, 0.5),
+    inset 1px 1px 3px #ffffff66;
+}
+
+.minus_button:hover {
+    background-color: #93ffa1;
+    box-shadow: 0px 0px 5px #00ff40,0 0 3px rgb(255, 255, 255);
+}
+
+.full_screen_btn:hover {
+    background-color: #ffe98f;
+    box-shadow: 0px 0px 5px #ffcc00,0 0 3px rgb(255, 255, 255);
+}
+
+.close-btn:hover {
+    background-color: #fc4141;
+    box-shadow: 0px 0px 5px #ff0000,0 0 3px rgb(255, 255, 255);
+}
+  
+.top_tab {
+    position: absolute; /* Permet de le fixer par rapport à la div parente */
+    pointer-events: none;
+    
+    left: 50%;
+    top:0.5%;
+    transform: translate( -50%);
+    padding: 0;
+    width: 99%; /* Il prend presque toute la largeur de la div parente */
+    height: 2.2vh; /* Sa hauteur est de 2.2% de la hauteur de la fenêtre (viewport height) */
+    background-color: #1f34d4; /* Couleur de fond */
+    font-size: 0.4vw;
+    align-items: center; /* Centre verticalement */
+    display: flex;
+    border-radius: 5px;
+    color: #EFEFEF;
+    justify-content: center; /* Centre le contenu horizontalement */
+    box-shadow: 
+    
+
+    inset 0px -1px 0px rgb(255, 255, 255),
+    inset 0px 1px 1px #ffffff81;
+
+    
+}
+
+.top_widget {
+    position: absolute; /* Permet de le fixer par rapport à la div parente */
+    
+    border-radius: 2px;
+    left: 50%;
+    top:1%;
+    transform: translate( -50%);
+    padding: 0;
+    width: 98%; /* Il prend presque toute la largeur de la div parente */
+    height: 2vh; /* Sa hauteur est de 2.2% de la hauteur de la fenêtre (viewport height) */
+    background-color: #1f34d4; /* Couleur de fond */
+    font-size: 0.4vw;
+    align-items: center; /* Centre verticalement */
+    display: flex;
+   
+    color: #EFEFEF;
+    justify-content: center; /* Centre le contenu horizontalement */
+    box-shadow: 
+    
+
+    inset 0px -1px 0px rgb(255, 255, 255),
+    inset 0px 1px 1px #ffffff81;
+
+}
+
+#eye_border_inner_contener{
+    border: 0.4vw solid #EFEFEF;
+    width: 90% ;/* Taille légèrement plus petite que le parent */
+    height: 80%; /* Taille légèrement plus petite que le parent */
+
+    background-color: #212121;
+    position: absolute; /* Permet de positionner cet élément indépendamment */
+    top: 55%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Assure le centrage parfait */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;  
+
+    z-index: 1; /* Assure que cette div est en dessous des autres enfants, si nécessaire */
+    box-shadow: 
+    inset 1px 1px 0px rgba(0, 0, 0, 1),
+    inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+.widget{
+   
+    height: 20vh; 
+    width: 12vw; 
+    position: absolute; 
+
+    
+    
+    margin-top: 0; /* Plus besoin de margin-top */
+    transition: all 0.05s ease; /* Gère les animations si nécessaire */
+    background-color: #EFEFEF; /* Exemple : pour tester */
+    z-index: 1;
+
+    color: #212121;
+    border: 2px solid #212121;
+    
+    
+    box-shadow: 5px 5px 0px rgb(21, 21, 21); 
+    animation: fadeInAndOut 0.9s ease-in-out forwards;
+    border-radius: 5px;
+
+}
+#eye_widget{
+    
+    left: 65.895vw; 
+    top: 6.8057vh; 
+}
+
+#contact_us{
+    
+    left: 65.895vw; 
+    top: 48.8057vh; 
+}
+
+#profile_widget{
+    left: 1vw; 
+    top: 40.8057vh; 
+    width: 30vw;
+    height: 30vh;
+} 
+
+#content_profile_widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* centre horizontalement */
+    justify-content: center; /* centre verticalement */
+    height: 100%;
+    width: 100%;
+    text-align: center;     /* optionnel mais utile pour tes <p> */
+}
+
+
+#inner_application6 {
+    display: flex;
+   
+    
+    height: 100vh; /* Définit une hauteur explicite pour le parent */
+  }
+.application_name{
+    left: 0.5vw;
+    position: absolute;
+    display: flex;
+}
+#inner-contener6 {
+    display: flex;
+    flex-direction: column; /* Permet d'empiler header et les deux autres divs */
+    height: 100%; /* Prend toute la hauteur disponible */
+    width: 100%; /* Prend toute la largeur disponible */
+}
+
+
+.truc{
+    font-size: 1vw;
+    position: relative;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.2vw;
+  }
+  
+
+
+.content2 {
+    
+    display: flex;
+    flex-direction: row;
+    height: 100%; /* Prend 80% de la hauteur totale */
+    width: 100%; /* S'étend sur toute la largeur */
+    
+}
+
+.header {
+    position: relative;
+    background-color: #EFEFEF; /* Couleur de la section header */
+    height: 5%; /* Prend 20% de la hauteur totale */
+    width: 100%; /* S'étend sur toute la largeur */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1%;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+.nav_button {
+    width: 3%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EFEFEF;
+    color: #212121;
+    cursor: none;
+    transition: background 0.3s ease;
+    font-size: 50%;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+
+
+#return_explorer{
+    margin-left: 2%;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    
+}
+.search_bar {
+    color: #212121;
+    background-color: #ffffff;
+    font-family: 'Press Start 2P', sans-serif;
+    
+    border-width: 1px;
+    caret-color: #212121;
+    outline: none;
+    
+    width: 70%;
+    height: 100%;
+    
+    font-size: 50%;
+    
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+
+    display: flex;
+    align-items: center; /* Centre verticalement */
+    padding: 0 5px; /* Ajoute un léger padding pour éviter que le texte touche les bords */
+}
+
+.search_bar .search_bar_text {
+    flex-grow: 1; /* Prend tout l'espace disponible */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    overflow: hidden; /* Cache le texte qui dépasse */
+    text-overflow: ellipsis; /* Ajoute des "..." en cas de dépassement */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alignement à droite */
+    
+    font-size: 100%;
+    color: #212121;
+    direction: ltr; /* Permet d'afficher la fin du texte */
+}
+
+.row_explorer {
+    width: 70%;
+    height: 60%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1%;
+
+    position: absolute; /* Permet de le positionner par rapport au parent */
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 1%;
+}
+
+
+
+.inner_folders .folder {
+    
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column;
+    width: 19%; /* La largeur du dossier */
+    height: 30%; /* La hauteur du dossier */
+    text-align: center; 
+    border: 1px solid rgba(161, 161, 161, 0.473); 
+    border-radius: 0px; 
+    flex-shrink: 0; 
+
+
+    
+    
+}
+
+.inner_folders .folder img {
+    height: auto; /* L'image prend 70% de la hauteur de .folder */
+    width: 31%; /* La largeur s'ajuste automatiquement en gardant les proportions */
+    margin: 5%; /* Espacement entre l'image et le texte */
+    pointer-events: none;
+}
+
+.inner_folders .folder p {
+    
+    font-size: 51.0%;
+    width: 92.2%;
+    line-height: 1; /* Ajuste l'interligne pour bien centrer */
+    text-align: center; /* Centre le texte dans sa zone */
+    margin: 0; 
+    
+    overflow: clip;
+    text-overflow: clip; /* Ajoute "..." si le texte est trop long */
+    white-space: normal; /* Empêche de passer à la ligne */
+    pointer-events: none;
+    color: #212121;
+}
+.list_folder {
+    background-color: #EFEFEF;
+    width: 20%; /* Largeur de la liste des dossiers */
+    height: 90%; /* Hauteur de la liste des dossiers */
+    display: flex;
+    flex-direction: column; 
+    padding: 1%; 
+    overflow: hidden; /* Utilise auto pour voir la barre de défilement quand c'est nécessaire */
+    
+    font-size: 0.5vw;
+
+    color: #212121;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+.list_folder_contener {
+    background-color: #EFEFEF;
+    width: 100%; /* Largeur de la zone de contenu */
+    
+    height: calc(100% - 20px); /* Ajuste la hauteur pour inclure les bordures et le padding */
+    display: flex;
+    flex-direction: column; 
+    padding: 0; 
+    overflow:clip;
+    overflow-y: scroll; /* Permet le défilement vertical */
+    cursor: none;
+    font-size: 0.5vw;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+
+    color: #212121;
+}
+/* Style des inner folders */
+.inner_folders {
+    background-color: #EFEFEF;
+    
+    width: 80%; 
+    height: 90%; 
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: flex-start; 
+    justify-content: flex-start; 
+    padding: 1%; 
+    column-gap: 0.2vw; 
+    overflow-y: auto;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+
+}
+
+.inner_folders > * {
+    flex: 0 1 auto; /* Empêche le resserrement en Y */
+}
+
+.inner_folder{
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    flex-direction: row;  
+    gap: 0.1vw;
+    row-gap: 0.2vh;
+    flex-wrap: wrap; 
+    align-items: flex-start; 
+    justify-content: flex-start; 
+}
+
+
+
+
+
+.list_folder_contener  .folder {
+    margin-top:2% ;
+    display: flex; /* Aligne le contenu interne */
+    flex-direction: row;
+    align-items: center; /* Centre verticalement l'image et le texte */
+    justify-content: flex-start; /* Centre horizontalement l'image et le texte */
+    width: 99%; /* Largeur fixe pour chaque dossier */
+    height: 10%; /* Hauteur fixe pour chaque dossier */
+    text-align: center; /* Centre le texte */
+    border-radius: 0px; /* Coins arrondis */
+    flex-shrink: 0; /* Empêche la réduction automatique de la taille des dossiers */ 
+    
+}
+
+.list_folder_contener  .folder:hover,  .inner_folders .folder:hover{
+    background-color: #2121212d;
+    padding: 0.01vw;
+
+}
+  
+.list_folder_contener .folder img {
+    pointer-events: none;
+    width: 15%; /* Taille de l'image ajustée pour correspondre au dossier */
+    height: auto;
+    margin: 5%; /* Espacement entre l'image et le texte */
+}
+
+.list_folder_contener .folder p {
+    margin: 0; /* Supprime toute marge pour éviter des espaces inattendus */
+    width: 60%; /* Ajustez selon vos besoins */
+    flex-grow: 1; /* Permet au paragraphe de prendre l'espace restant */
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    font-size: 100%;
+}
+
+.footer_file_explorer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5%;
+    background-color: #EFEFEF;
+    display: flex;
+    padding: 0;
+
+    align-items: center; /* Centre parfaitement les éléments en hauteur */
+    justify-content: flex-end; /* Aligne les éléments à droite */
+    box-shadow: 
+        inset 0px 1px 0px rgba(0, 0, 0, 1);
+}
+
+.folder_name {
+    width: 40%;
+    height: 100%; /* Laisse la hauteur s'adapter */
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center; /* Assure l'alignement vertical du contenu */
+    
+    padding: 0;
+    margin-top: 1%;
+    margin-right: 2%;
+    font-size: 70%;
+    color: #212121;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+
+}
+
+.folder_name_text {
+    width: 40%;
+    height: 80%; /* Laisse la hauteur s'adapter */
+    display: flex;
+    align-items: center; /* Centre verticalement le contenu */
+    justify-content: flex-start; /* Aligne le contenu à droite */
+    font-size: 70%;
+    color: #212121;
+    margin-left: 2%; /* Ajoute une marge à droite (ajuste la valeur selon le besoin) */
+}
+
+
+
+details details {
+    margin-left: 20px;
+}
+
+.space{
+    height: 1%;
+    width: 80%;
+    background-color: #2121213f;
+    margin: 5%;
+    
+    transform: translateX(5%);
+}
+
+.content{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-y: scroll;
+    padding: 0;
+    
+}
+
+#content_eye_widget, #content_profile_widget, #content_contact_widget{
+    overflow: hidden;
+}
+canvas{
+    height: 100%;
+    width: 100%;
+}
+
+.loading_url{
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: monospace;
+    font-size: 0.8vw;
+    font-family: 'Press Start 2P';
+    font-family: monospace;
+    white-space: pre;
+    word-wrap: break-word;
+    background-color: #041127;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 1;
+}
+
+
+.scale-slider {
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-58%);
+    width: 20%;
+    height: 8px;
+    background: #212121;
+    border-radius: 5px;
+    cursor: none;
+    -webkit-appearance: none; /* Supprime le style par défaut sur Chrome/Safari */
+    appearance: none;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+/* Personnalisation du curseur sur WebKit (Chrome, Safari) */
+.scale-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #efefef;
+    border-radius: 5px;
+    cursor: none;
+    box-shadow: 
+    inset 1px 1px 0px rgba(0, 0, 0, 1),
+    inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+/* Personnalisation du curseur sur Firefox */
+.scale-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #efefef;
+    border-radius: 5px;
+    cursor: none;
+    box-shadow: 
+    inset 1px 1px 0px rgba(0, 0, 0, 1),
+    inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+
+.download_button{
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    
+    width: 40px;
+    height: 40px;
+    background: #efefef;
+    border-radius: 5px;
+    cursor: none;
+    -webkit-appearance: none; /* Supprime le style par défaut sur Chrome/Safari */
+    appearance: none;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+.download_icon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -45%);
+    width: 50%;
+    height: 50%;
+}
+
+@media (max-width: 1000px) {
+    body {
+        font-size: 15px;
+    }
+
+    .container {
+        width: 90%;
+    }
+}
+
+/* Écrans < 700px (tablettes) */
+@media (max-width: 700px) {
+
+
+}
+
+
+
+
+
+
+
+/* (orientation: portrait) */
+@media (pointer: coarse) and (orientation: portrait){
+    .screen, .screen_start{
+        background-image: url('/img/screenBackground5_mobile.png');
+    }
+    
+    .menu_item{
+        width: 18%;
+        height: 10%;
+    
+    }
+    .menu_item img{
+        width: 70%;
+        height: auto;
+    
+    }
+    
+    .menu_item a{
+        font-size: 1.5vw;
+    
+    }
+    
+    #eye_widget, #profile_widget{
+        display: none ;
+        pointer-events: none;
+    }
+    
+    #contact_us{
+        width: 40vw;
+        height: 20vh;
+        left: 57vw;
+        top: 55vh;
+    }
+    
+    #contact_border_inner_contener{
+        height: 85%;
+        margin-top: 4%;
+    }
+    #contact_border_inner_contener p {
+        font-size: 1vh !important;
+    }
+    .datetime{
+        height: 1vh;
+        font-size: 150%;
+        width: 10vw;
+        right: 2vw;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .name_container{
+        width: 28vw;
+        height: 100%;
+        font-size: 100%;
+        left: 27vw;
+        
+    }
+    .arrow_slide{
+
+    height: 1.4vh;
+    width: 1.4vh;
+    right: 0.4vw;
+}
+    
+    #name_container_button2{
+         width: 15vw;
+         margin-left: 7vw;
+    }
+    .application{
+        min-width: 10vw;
+        min-height: 10vw;
+
+    }
+    
+    .rectangular-bar{
+        transition: none;
+        bottom: 0;
+    }
+    
+    .logo-os{
+        width: 5%;
+        left: 2vw;
+    }
+    
+    .additional-container2 {
+        margin-left: 8.5vw !important;
+    }
+    
+    .container_profile{
+        width: 60vw;
+        height: 65vw ;
+    }
+    
+    #raph_dropdown{
+        width: 60vw;
+    }
+    
+    .profile_subtitle {
+        font-size: 1vh;
+        text-align: center; /* ou left si tu préfères */
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .landing-start-container{
+        margin-top: 1vh;
+        height: 10vh;
+    }
+    .profile_image_contener{
+        width: 15vh;
+        height: 15vh;
+        border: 10px solid #EFEFEF;
+    }
+    
+    .profile_name{
+        font-size: 1.2vh;
+    }
+    
+    .start_button{
+
+        font-size: 1vh ;
+    }
+    
+    #shutdown{
+        width: 1.5vh;
+        height:1.5vh;
+    }
+    
+    #shutdown img{
+        width: 60%;
+    }
+    
+    .dropdown-content{
+        width:40vw;
+        height: 50vh;
+    }
+    
+    
+    .top_tab {
+    height: 3vh;
+    font-size: 0.8vh;
+    
+
+
+    }
+    
+    .application_name {
+      left: 1vh;
+    font-size: 0.8vh;
+    }
+    
+    .minus_button, .full_screen_btn, .close-btn {
+
+      width: 3vh;
+      height: 1.5vh;
+      border-radius: 5px;
+      box-shadow: inset -5px -5px 3px rgba(0, 0, 0, 0.5), inset 5px 5px 3px #ffffff66;
+    }
+    
+    .minus_button {
+
+    right: 4.5vh;
+
+    }
+
+    .full_screen_btn {
+        right:4.5vh;
+        display: none;
+    }
+    
+    .close-btn {
+        
+        right: 1vh;
+
+    }
+    
+   .border-inner-contener {
+    width: calc(100% - 1.2vw); /* Taille légèrement plus petite que le parent */
+    height: calc(95%); /* Taille légèrement plus petite que le parent */
+
+    top: 51.8%; /* Centre verticalement */
+
+    transform: translate(-50%, -50%); /* Assure le centrage parfait */
+
+
+  }
+
+    
+    .content2 {
+
+    height: 100%; /* Prend 80% de la hauteur totale */
+    width: 100%; /* S'étend sur toute la largeur */
+    
+}
+
+    .content {
+
+    height: 100%; /* Prend 80% de la hauteur totale */
+    width: 100%; /* S'étend sur toute la largeur */
+    box-shadow: 
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(134, 133, 133);    
+}
+
+.header {
+
+    height: 5%; /* Prend 20% de la hauteur totale */
+    box-shadow: 
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(134, 133, 133);    
+}
+
+.nav_button {
+    width: 5%;
+    height: 100%;
+    font-size: 150%;
+
+}
+
+
+
+#return_explorer{
+    margin-left: 2%;
+}
+
+
+.search_bar {
+    width: 80%;
+    height: 100%;
+    font-size: 50%;
+}
+
+.search_bar .search_bar_text {
+
+    font-size: 200%;
+
+}
+
+.row_explorer {
+    width: 100%;
+    height: 60%;
+}
+
+
+
+.inner_folders .folder {
+    
+    width: 30%; /* La largeur du dossier */
+    height: 23.2%; /* La hauteur du dossier */
+    margin: 1%;
+}
+
+.inner_folders .folder img {
+
+    width: 80%; /* La largeur s'ajuste automatiquement en gardant les proportions */
+
+}
+
+.inner_folders .folder p {
+    
+    font-size: 100%;
+}
+.list_folder {
+
+    width: 40%; /* Largeur de la liste des dossiers */
+    box-shadow: 
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(134, 133, 133);
+
+}
+
+.list_folder_contener {
+
+    font-size: 1vh;
+     box-shadow: 
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(134, 133, 133);
+}
+/* Style des inner folders */
+.inner_folders {
+
+    
+    width: 60%; 
+    height: 90%; 
+
+    padding: 2%; 
+    box-shadow: 
+    inset 2px 2px 0px rgba(0, 0, 0, 1),
+    inset 0px 3px 0px rgba(0, 0, 0, 1),
+    inset -2px -2px 0px rgb(134, 133, 133);
+
+}
+
+.inner_folders > * {
+    flex: 0 1 auto; /* Empêche le resserrement en Y */
+}
+
+.list_folder_contener  .folder {
+    margin-top:2% ;
+
+    width: 99%; /* Largeur fixe pour chaque dossier */
+    height: 10%; /* Hauteur fixe pour chaque dossier */
+
+}
+
+.list_folder_contener  .folder:hover,  .inner_folders .folder:hover{
+    background-color: #2121212d;
+    padding: 0.01vw;
+
+}
+  
+
+.footer_file_explorer {
+
+    width: 100%;
+    height: 5%;
+
+    box-shadow: 
+        inset 0px 2px 0px rgba(0, 0, 0, 1);
+}
+
+.folder_name {
+    width: 40%;
+    height: 50%; 
+
+    box-shadow: 
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(134, 133, 133);
+
+}
+
+.folder_name_text {
+
+    font-size: 150%;
+
+}
+
+
+#exit_fullscreen{
+    box-shadow: inset -10px -10px 6px rgba(0, 0, 0, 0.5), inset 10px 10px 6px #ffffff66;
+    border-radius: 10px;
+}
+
+#exit_fullscreen_name{
+
+    font-size: 100%;
+
+}
+
+
+
+.full_screen .dropdown-content {
+
+    width: 10vh;
+
+}
+
+}

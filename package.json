@@ -1,36 +1,34 @@
 {
-  "dependencies": {
-    "@hotwired/turbo": "^8.0.12",
-    "cors": "^2.8.5",
-    "dompurify": "^3.2.3",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "gltfloader": "github:codeurdenuit/GLTFLoader",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.12.0",
-    "swup": "^4.8.1",
-    "three": "^0.173.0"
-  },
-  "name": "teledemande",
-  "description": "",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zbeubizbeub/teledemande.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/zbeubizbeub/teledemande/issues"
-  },
-  "homepage": "https://github.com/zbeubizbeub/teledemande#readme",
+  "name": "myos",
+  "private": true,
+  "version": "2.0.0",
+  "description": "MyOS — portfolio de Raphaël Gosset en forme de système d'exploitation rétro",
   "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "icons": "node scripts/build-icons.mjs",
+    "admin:password": "node scripts/admin-password.mjs"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/press-start-2p": "^5.3.0",
+    "dompurify": "^3.4.17",
+    "marked": "^18.2.0",
+    "pdfjs-dist": "^6.5.438",
+    "shiki": "^4.6.0",
+    "three": "^0.187.0"
+  },
   "devDependencies": {
-    "vite": "^6.1.0"
+    "@types/node": "^26.6.6",
+    "@types/three": "^0.187.0",
+    "bcryptjs": "^3.0.3",
+    "jsdom": "^29.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.7",
+    "vitest": "^5.1.0"
   }
 }

@@ -1,0 +1,2 @@
+# Bibliothèques internes de l'API : jamais servies directement.
+Require all denied

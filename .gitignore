@@ -2,7 +2,6 @@
 node_modules/
 img/
 npm-debug.log*
-package-lock.json
 app.js
 db.js
 file_explorer.sql
@@ -38,3 +37,8 @@ error_log.txt
 *.zip
 .trash/
 *.sql
+
+# MyOS v2
+docker/.data/
+.claude/
+public/api/_storage/
