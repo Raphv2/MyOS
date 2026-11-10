@@ -4,7 +4,7 @@ Tout se fait depuis **hPanel → Fichiers → Gestionnaire de fichiers** (et php
 La base de données n'est **pas modifiée** : ni le schéma, ni les données. On peut revenir en arrière
 à tout moment (étape 6).
 
-## 0. Sécurité — à faire tout de suite, même sans déployer
+## 0. Sécurité - à faire tout de suite, même sans déployer
 
 1. Supprimer `public_html/public_html (1).zip` : il est téléchargeable par n'importe qui et contient le `.env`.
 2. Supprimer `public_html/error_log.txt` (public lui aussi).
@@ -34,7 +34,7 @@ npm test
 npm run build
 ```
 
-Le dossier `dist/` contient tout le nouveau site : `index.html`, `assets/`, `api/`, `os-icons/`, `data.json`, `.htaccess`.
+Le dossier `dist/` contient tout le nouveau site : `index.html`, `assets/`, `api/`, `data.json`, `.htaccess`.
 (Les médias `img/` sont déjà sur le serveur : ils ne sont pas dans `dist/`.)
 
 ## 4. Remplacer l'ancien site
@@ -55,7 +55,7 @@ Le dossier `dist/` contient tout le nouveau site : `index.html`, `assets/`, `api
 
 ## 6. Retour arrière (si besoin)
 
-Supprimer de `public_html` : `index.html`, `assets/`, `api/`, `os-icons/`, `.htaccess`, puis remettre
+Supprimer de `public_html` : `index.html`, `assets/`, `api/`, `.htaccess`, puis remettre
 les fichiers de `backup-v1/` à leur place. L'ancien site repart tel quel (la base n'a pas changé).
 
 ## Mises à jour suivantes

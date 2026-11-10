@@ -23,7 +23,7 @@ export async function openAdmin(os: Os): Promise<void> {
 }
 
 function openLogin(os: Os, configured: boolean): void {
-  const { win, created } = os.wm.open({ key: 'admin-login', title: 'Admin.exe — connexion', icon: ICON.admin, label: 'Admin', width: '30%', height: '40%', className: 'win-admin-login' });
+  const { win, created } = os.wm.open({ key: 'admin-login', title: 'Admin.exe - connexion', icon: ICON.admin, label: 'Admin', width: '30%', height: '40%', className: 'win-admin-login' });
   if (!created) return;
 
   if (!configured) {
@@ -114,19 +114,19 @@ class AdminPanel {
     const toolbar = h(
       'div',
       { class: 'admin-toolbar' },
-      btn('+ Dossier', () => this.newFolder()),
-      btn('⇪ Fichiers', () => this.pickFiles(false), { title: 'Importer des fichiers' }),
-      btn('⇪ Dossier', () => this.pickFiles(true), { title: 'Importer un dossier (code…)' }),
-      btn('★ Projet', () => this.newProject(), { cls: 'os-btn-primary', title: 'Nouveau projet sur le bureau' }),
-      btn('↗ Raccourci', () => this.newShortcut()),
-      btn('⌁ Lien', () => this.newLink()),
+      btn('Nouveau dossier', () => this.newFolder()),
+      btn('Importer fichiers', () => this.pickFiles(false), { title: 'Importer des fichiers' }),
+      btn('Importer dossier', () => this.pickFiles(true), { title: 'Importer un dossier (code…)' }),
+      btn('Nouveau projet', () => this.newProject(), { cls: 'os-btn-primary', title: 'Nouveau projet sur le bureau' }),
+      btn('Raccourci', () => this.newShortcut()),
+      btn('Lien', () => this.newLink()),
       h('span', { class: 'admin-toolbar-sep' }),
       btn('Ouvrir', () => this.openSelected(), { needsSel: true }),
       btn('Renommer', () => this.rename(), { needsSel: true }),
       btn('Déplacer', () => this.move(), { needsSel: true }),
       btn('Supprimer', () => this.remove(), { needsSel: true, cls: 'os-btn-danger' }),
       h('span', { class: 'admin-toolbar-grow' }),
-      btn('⟳', () => this.refresh(), { title: 'Actualiser' }),
+      btn('Actualiser', () => this.refresh()),
       btn('Déconnexion', () => this.signOut()),
     );
 
@@ -270,21 +270,21 @@ class AdminPanel {
 
     const subs = fs.subfolders(this.currentId);
     const files = fs.filesIn(this.currentId);
-    const date = (s: string | null) => (s ? new Date(s.replace(' ', 'T')).toLocaleDateString('fr-FR') : '—');
+    const date = (s: string | null) => (s ? new Date(s.replace(' ', 'T')).toLocaleDateString('fr-FR') : '-');
     const row = (kind: 'folder' | 'file', id: number, icon: string, name: string, type: string, size: string, when: string, locked = false) =>
       h(
         'div',
         { class: `admin-row${locked ? ' is-locked' : ''}`, dataset: { kind, id }, attrs: { role: 'row', tabindex: 0 } },
-        h('span', { class: 'admin-cell-name' }, img(icon, 'admin-icon'), h('span', { text: name }), locked ? h('span', { class: 'admin-lock', text: '🔒', title: 'Dossier système' }) : null),
+        h('span', { class: 'admin-cell-name' }, img(icon, 'admin-icon'), h('span', { text: name }), locked ? h('span', { class: 'admin-lock', text: 'système', title: 'Dossier indispensable au site' }) : null),
         h('span', { text: type }),
         h('span', { text: size }),
         h('span', { text: when }),
       );
     this.table.replaceChildren(
-      ...subs.map((f) => row('folder', f.id, folderIcon(f), f.name, 'dossier', '—', '—', isProtected(f.id))),
+      ...subs.map((f) => row('folder', f.id, folderIcon(f), f.name, 'dossier', '-', '-', isProtected(f.id))),
       ...files.map((f) => row('file', f.id, fileIcon(f, { projectLogo: this.os.projectLogo(f) }), f.name, f.ext || nameExtension(f.name), formatSize(f.size), date(f.row.updated_at))),
     );
-    if (!subs.length && !files.length) this.table.appendChild(h('p', { class: 'admin-empty', text: 'Dossier vide — glisse des fichiers ici.' }));
+    if (!subs.length && !files.length) this.table.appendChild(h('p', { class: 'admin-empty', text: 'Dossier vide - glisse des fichiers ici.' }));
     this.select(null);
 
     const limits = getLimits();

@@ -56,7 +56,7 @@ class Ide {
     const statusBar = h(
       'div',
       { class: 'ide-status' },
-      h('span', { class: 'ide-status-brand', text: '◆ MyOS Code' }),
+      h('span', { class: 'ide-status-brand', text: 'MyOS Code' }),
       this.status.lines,
       h('span', { text: 'UTF-8' }),
       this.status.lang,
@@ -222,7 +222,7 @@ export function openIde(os: Os, root: FsFolder, file?: FsFile): void {
   const key = `ide:${root.id}`;
   const { win, created } = os.wm.open({
     key,
-    title: `MyOS Code — ${root.name}`,
+    title: `MyOS Code - ${root.name}`,
     icon: ICON.ide,
     label: `Code ${root.name}`,
     width: '64%',

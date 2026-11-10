@@ -2,7 +2,7 @@
   "name": "myos",
   "private": true,
   "version": "2.0.0",
-  "description": "MyOS — portfolio de Raphaël Gosset en forme de système d'exploitation rétro",
+  "description": "MyOS - portfolio de Raphaël Gosset en forme de système d'exploitation rétro",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "icons": "node scripts/build-icons.mjs",
     "admin:password": "node scripts/admin-password.mjs"
   },
   "dependencies": {

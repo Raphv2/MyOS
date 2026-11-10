@@ -1,6 +1,6 @@
 <?php
 /**
- * /api/auth.php — connexion admin.
+ * /api/auth.php - connexion admin.
  *   GET                         → { authenticated, configured, csrf?, limits? }
  *   POST { action: "login", password }
  *   POST { action: "logout" }   (en-tête X-CSRF-Token)

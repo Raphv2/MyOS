@@ -1,6 +1,6 @@
 <?php
 /**
- * GET /api/tree.php — arborescence { folders, files } lue directement en base.
+ * GET /api/tree.php - arborescence { folders, files } lue directement en base.
  * Remplace l'ancien db.php qui réécrivait data.json à chaque visite :
  * on ne réécrit l'instantané que s'il a changé, et on le sert si la base tombe.
  */

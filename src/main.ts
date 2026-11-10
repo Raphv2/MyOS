@@ -3,6 +3,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import './styles/legacy.css';
 import './styles/os.css';
 
+import { installAssetFallback } from './core/assets';
 import { getFullscreenPref, isMobile, setFullscreenPref } from './core/device';
 import { qs } from './core/dom';
 import { Cursor } from './os/cursor';
@@ -10,6 +11,8 @@ import { mountDesktop } from './os/desktop';
 import { mountOff, mountStart } from './os/screens';
 
 type Page = 'start' | 'accueil' | 'endoflight';
+
+installAssetFallback();
 
 const app = qs('#app');
 let current: Page = 'start';
@@ -58,7 +61,7 @@ const togglePower = () => go(current === 'endoflight' ? 'start' : 'endoflight');
 power.addEventListener('click', togglePower);
 power.addEventListener('keydown', (e) => e.key === 'Enter' && togglePower());
 
-// Bouton source (et post-it) : plein écran sans le cadre TV — désormais sans recharger la page.
+// Bouton source (et post-it) : plein écran sans le cadre TV - désormais sans recharger la page.
 const source = qs('#source_button');
 source.addEventListener('click', () => applyFullscreen(!fullscreen));
 source.addEventListener('keydown', (e) => e.key === 'Enter' && applyFullscreen(!fullscreen));

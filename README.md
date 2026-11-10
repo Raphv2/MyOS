@@ -48,8 +48,7 @@ src/
   styles/legacy.css   l'ancien home.css (le look du site)
   styles/os.css       styles de la v2
 public/
-  api/                API PHP (tree, auth, admin) — _lib/ n'est pas accessible depuis le web
-  os-icons/           icônes pixel des nouveaux types (générées : npm run icons)
+  api/                API PHP (tree, auth, admin) - _lib/ n'est pas accessible depuis le web
   .htaccess           sécurité + redirection des anciennes URLs
   data.json           instantané de secours de l'arborescence
 img/                  médias du site (non versionnés, déjà sur le serveur)
@@ -70,7 +69,28 @@ Pour mettre en ligne : voir [DEPLOIEMENT.md](DEPLOIEMENT.md).
 
 ## Ajouter un projet sur le bureau
 
-Depuis l'admin → **★ Projet** : nom, logo, description (Markdown), PDF de présentation, images /
+Depuis l'admin → **Nouveau projet** : nom, logo, description (Markdown), PDF de présentation, images /
 vidéos et le dossier de code. MyOS crée le dossier, envoie tout et pose l'icône (le logo) sur le
 bureau. Aucune modification de la base : un projet est une ligne `files` d'extension `project`
 dont le nom est celui du dossier du projet.
+
+## Icônes à fournir
+
+Les nouveaux types n'ont pas encore d'icône : à leur place, le site affiche un **carré noir avec le
+nom du fichier attendu**. Dépose le PNG (49×49, même style que les autres) dans `img/` sur le
+serveur : il est pris automatiquement, sans rien recompiler.
+
+| Fichier dans `img/` | Utilisé pour |
+| --- | --- |
+| `mp4.png` | vidéos (mp4, webm) |
+| `code.png` | fichiers de code (ts, js, py, php…) |
+| `md.png` | documents Markdown (README) |
+| `project.png` | projet sans logo |
+| `link.png` | liens créés depuis l'admin |
+| `file.png` | type de fichier inconnu |
+| `admin.png` | bouton admin du menu Start, fenêtres admin |
+| `error.png` | boîtes d'erreur |
+| `ide.png` | fenêtre MyOS Code |
+| `play.png`, `pause.png`, `sound.png`, `mute.png`, `video_fullscreen.png` | boutons des lecteurs audio / vidéo |
+
+La liste est dans `src/core/assets.ts`.

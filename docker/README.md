@@ -29,7 +29,7 @@ npm run build
 docker compose -f docker/compose.yml up -d --build
 ```
 
-Site : http://localhost:8080 — l'admin s'ouvre depuis le menu Start (bouton clé).
+Site : http://localhost:8080 - l'admin s'ouvre depuis le menu Start (bouton clé).
 
 Après une modification du front : `npm run build` suffit (dist/ est monté dans le conteneur).
 

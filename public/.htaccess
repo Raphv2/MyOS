@@ -1,4 +1,4 @@
-# MyOS v2 — public_html/.htaccess (Hostinger / Apache / LiteSpeed)
+# MyOS v2 - public_html/.htaccess (Hostinger / Apache / LiteSpeed)
 
 DirectoryIndex index.html
 Options -Indexes

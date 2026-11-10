@@ -1,6 +1,6 @@
 <?php
 /**
- * /api/admin.php — écritures de l'admin intégré (connexion + CSRF obligatoires).
+ * /api/admin.php - écritures de l'admin intégré (connexion + CSRF obligatoires).
  *
  * Respecte strictement le schéma existant (tables `folders` / `files`) et les
  * conventions des lignes déjà en base :

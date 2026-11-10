@@ -2,7 +2,7 @@ import { h } from '../core/dom';
 import type { FsFile } from '../core/fs';
 import { fileIcon } from '../core/icons';
 import type { Os } from '../os/context';
-import { mediaControls, pixelIcon, stopMedia } from './media';
+import { controlIcon, mediaControls, stopMedia } from './media';
 
 /** Lecteur vidéo (mp4/webm) avec contrôles rétro et effet scanlines. */
 export function openVideo(os: Os, file: FsFile): void {
@@ -26,7 +26,7 @@ export function videoPlayer(
 ): HTMLDivElement {
   const video = h('video', { class: 'media-video', attrs: { src: url, preload: 'metadata', playsinline: true } });
   const bigPlay = h('button', { class: 'media-bigplay', attrs: { type: 'button', 'aria-label': `Lire ${title}` } });
-  bigPlay.appendChild(pixelIcon('play'));
+  bigPlay.appendChild(controlIcon('play', 'ctrl-icon ctrl-icon-big'));
   const stage = h('div', { class: 'media-stage' }, video, h('div', { class: 'media-scanlines' }), bigPlay);
   const player = h('div', { class: 'content media-player' }, stage);
   player.appendChild(mediaControls(video, signal, { fullscreenTarget: stage, keyTarget: player }));

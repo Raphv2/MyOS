@@ -4,7 +4,7 @@ import type { FsFile } from '../core/fs';
 import { fileIcon } from '../core/icons';
 import type { Os } from '../os/context';
 
-/** Bloc-notes : affiche un .txt (on peut taper dedans, rien n'est enregistré — comme avant). */
+/** Bloc-notes : affiche un .txt (on peut taper dedans, rien n'est enregistré - comme avant). */
 export function openText(os: Os, file: FsFile): void {
   const { win, created } = os.wm.open({ key: `file:${file.id}`, title: file.name, icon: fileIcon(file) });
   if (!created) return;

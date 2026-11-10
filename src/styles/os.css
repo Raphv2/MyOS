@@ -1,5 +1,5 @@
 /*
- * MyOS v2 — styles ajoutés par la refonte.
+ * MyOS v2 - styles ajoutés par la refonte.
  * legacy.css = l'ancien home.css (le look du site), à peine retouché.
  * Ici : ce qui était en style inline dans les vues PHP/JS + les nouvelles applis.
  */
@@ -262,10 +262,40 @@ body.is-fullscreen .full_screen {
 .os-btn[disabled] {
   opacity: 0.45;
 }
-.px-icon {
-  width: 10px;
-  height: 10px;
-  fill: currentColor;
+/* Icônes des boutons du lecteur (img/play.png…) */
+.os-btn-icon {
+  width: auto;
+  min-width: 24px;
+  padding: 0 3px;
+}
+.ctrl-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.ctrl-icon-big {
+  width: 24px;
+  height: 24px;
+}
+
+/* Asset pas encore fourni : carré noir avec le nom du fichier à déposer dans img/ */
+.asset-missing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  min-height: 14px;
+  padding: 1px 3px;
+  box-sizing: border-box;
+  background: #000;
+  color: #fff;
+  font: 6px/1.2 var(--pixel);
+  white-space: nowrap;
+}
+.media-bigplay .asset-missing {
+  font-size: 7px;
+  padding: 4px;
 }
 
 .app-error {
@@ -415,7 +445,7 @@ body.is-fullscreen .full_screen {
 }
 .media-bigplay {
   position: absolute;
-  width: 56px;
+  min-width: 56px;
   height: 48px;
   border: 2px solid var(--os-ink);
   background: var(--os-bg);
@@ -424,10 +454,6 @@ body.is-fullscreen .full_screen {
   place-items: center;
   box-shadow: 5px 5px 0 var(--os-shadow);
   cursor: none;
-}
-.media-bigplay .px-icon {
-  width: 22px;
-  height: 22px;
 }
 .media-bigplay:hover {
   background: #fff;

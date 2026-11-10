@@ -1,44 +1,29 @@
+import { ASSET, assetIcon } from '../core/assets';
 import { formatTime, h } from '../core/dom';
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
+/** Icônes des contrôles : à fournir dans img/ (carré noir nommé tant qu'elles manquent). */
+const CONTROL_ICONS = {
+  play: ASSET.play,
+  pause: ASSET.pause,
+  sound: ASSET.sound,
+  mute: ASSET.mute,
+  full: ASSET.fullscreen,
+} as const;
 
-/** Icônes pixel des contrôles (grille 8×8, dessinées en rectangles pour rester nettes). */
-const PIXELS: Record<string, string[]> = {
-  play: ['X.......', 'XXX.....', 'XXXXX...', 'XXXXXXX.', 'XXXXXXX.', 'XXXXX...', 'XXX.....', 'X.......'],
-  pause: ['XX..XX..', 'XX..XX..', 'XX..XX..', 'XX..XX..', 'XX..XX..', 'XX..XX..', 'XX..XX..', 'XX..XX..'],
-  sound: ['...X....', '..XX..X.', 'XXXX.X..', 'XXXX.X.X', 'XXXX.X.X', 'XXXX.X..', '..XX..X.', '...X....'],
-  mute: ['...X....', '..XX....', 'XXXX.X.X', 'XXXX..X.', 'XXXX..X.', 'XXXX.X.X', '..XX....', '...X....'],
-  full: ['XXX..XXX', 'X......X', 'X......X', '........', '........', 'X......X', 'X......X', 'XXX..XXX'],
-};
+type ControlIcon = keyof typeof CONTROL_ICONS;
 
-export function pixelIcon(name: keyof typeof PIXELS | string): SVGSVGElement {
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 8 8');
-  svg.setAttribute('shape-rendering', 'crispEdges');
-  svg.setAttribute('aria-hidden', 'true');
-  svg.classList.add('px-icon');
-  (PIXELS[name] ?? []).forEach((row, y) =>
-    [...row].forEach((c, x) => {
-      if (c !== 'X') return;
-      const r = document.createElementNS(SVG_NS, 'rect');
-      r.setAttribute('x', String(x));
-      r.setAttribute('y', String(y));
-      r.setAttribute('width', '1');
-      r.setAttribute('height', '1');
-      svg.appendChild(r);
-    }),
-  );
-  return svg;
+export function controlIcon(name: ControlIcon, cls = 'ctrl-icon'): HTMLImageElement {
+  return assetIcon(CONTROL_ICONS[name], cls);
 }
 
-export function osButton(icon: string, label: string): HTMLButtonElement {
-  const b = h('button', { class: 'os-btn', title: label, attrs: { type: 'button', 'aria-label': label } });
-  b.appendChild(pixelIcon(icon));
+export function osButton(icon: ControlIcon, label: string): HTMLButtonElement {
+  const b = h('button', { class: 'os-btn os-btn-icon', title: label, attrs: { type: 'button', 'aria-label': label } });
+  b.appendChild(controlIcon(icon));
   return b;
 }
 
-function setIcon(btn: HTMLButtonElement, icon: string) {
-  btn.replaceChildren(pixelIcon(icon));
+function setIcon(btn: HTMLButtonElement, icon: ControlIcon) {
+  btn.replaceChildren(controlIcon(icon));
 }
 
 /**

@@ -74,7 +74,7 @@ export function formatTime(seconds: number): string {
 
 /** Taille lisible : 329894 → `322 Ko`. */
 export function formatSize(bytes: number): string {
-  if (!bytes) return '—';
+  if (!bytes) return '-';
   const units = ['o', 'Ko', 'Mo', 'Go'];
   let i = 0;
   let v = bytes;

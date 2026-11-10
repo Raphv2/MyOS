@@ -1,4 +1,5 @@
 import { isMobile } from '../core/device';
+import { setBackgroundIcon } from '../core/assets';
 import { clamp, h } from '../core/dom';
 import type { Cursor } from './cursor';
 
@@ -46,7 +47,8 @@ export class OSWindow {
       this.body,
       isMobile ? null : h('div', { class: 'win-resize', attrs: { 'aria-hidden': 'true' } }),
     );
-    this.taskIcon = h('div', { class: 'application', style: { backgroundImage: `url("${opts.icon}")` } });
+    this.taskIcon = h('div', { class: 'application' });
+    setBackgroundIcon(this.taskIcon, opts.icon);
 
     const { signal } = this;
     close.addEventListener('click', () => this.close(), { signal });
@@ -137,7 +139,7 @@ export class WindowManager {
 
   /**
    * Ouvre une fenêtre. Si elle existe déjà, elle est simplement remise devant
-   * (`created: false`) — l'ancien site refusait aussi les doublons.
+   * (`created: false`) - l'ancien site refusait aussi les doublons.
    */
   open(opts: WindowOptions): { win: OSWindow; created: boolean } {
     const existing = this.windows.get(opts.key);

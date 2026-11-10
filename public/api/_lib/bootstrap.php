@@ -1,6 +1,6 @@
 <?php
 /**
- * MyOS API — socle commun (config, base, JSON, erreurs).
+ * MyOS API - socle commun (config, base, JSON, erreurs).
  * Ce dossier n'est pas accessible depuis le web (.htaccess), et chaque fichier
  * vérifie MYOS_API pour ne rien faire s'il est appelé directement.
  */
