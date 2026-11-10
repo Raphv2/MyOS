@@ -20,7 +20,11 @@ DB_NAME=file_explorer
 DB_USER=myos
 DB_PASS=myos-local-dev
 ADMIN_PASSWORD_HASH='…la ligne générée…'
+SNAPSHOT_WRITE=0
 ```
+
+`SNAPSHOT_WRITE=0` est indispensable : sans lui, l'API de test réécrit `dist/data.json` avec la base de
+test, et ce fichier partirait en prod au prochain déploiement.
 
 ## Lancer
 

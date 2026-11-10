@@ -47,7 +47,8 @@ unset($f);
 $json = json_encode(['folders' => $folders, 'files' => $files], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 // Instantané de secours (même format que l'ancien data.json).
-if (!is_file($snapshot) || md5_file($snapshot) !== md5($json)) {
+// SNAPSHOT_WRITE=0 (environnement de test) : ne jamais toucher data.json, qui part en prod.
+if (env('SNAPSHOT_WRITE', '1') !== '0' && (!is_file($snapshot) || md5_file($snapshot) !== md5($json))) {
     @file_put_contents($snapshot, $json, LOCK_EX);
 }
 
