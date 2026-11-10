@@ -1,14 +1,14 @@
 import * as t  from './tab.js';
 
 
-export async function generateDesktopMenu(width, height) {
+export async function generateDesktopMenu(width, height, isMobile) {
     try {
         const response = await fetch('data.json'); // Charger le fichier JSON
         const items = await response.json(); // Récupérer les données JSON
 
         const screenDiv = document.querySelector('.screen'); 
 
-        updateDateTime();
+        updateDateTime(isMobile);
         
         exitFullscreen();
 
@@ -20,6 +20,10 @@ export async function generateDesktopMenu(width, height) {
         const filteredItems = items.folders.concat(items.files).filter(item => item.folder_id === 8);
 
         filteredItems.forEach(item => {
+            
+            if (document.getElementById(item.name)) {
+                return;
+            }
             const menuItem = document.createElement('div');
             menuItem.className = 'menu_item';
             menuItem.id = item.name;
@@ -43,7 +47,7 @@ export async function generateDesktopMenu(width, height) {
         });
 
         console.log("Le bureau s'est généré correctement avec les éléments du dossier 8");
-        setInterval(updateDateTime, 1000);
+        setInterval(updateDateTime(isMobile), 1000);
         openFileExplorer(screenDiv, 'id_Home_icon', width, height);
         const eye = document.getElementById('eye');
         const content = document.getElementById('content_eye_widget');
@@ -60,14 +64,13 @@ export async function generateDesktopMenu(width, height) {
 }
 
 
-export function updateDateTime() {
+export function updateDateTime(isMobile) {
 
     const datetime = document.getElementById("datetime");
     if(!datetime) return;
 
     const now = new Date();
-  
-    // Formater l'heure
+    
     const formattedTime = now.toLocaleTimeString('fr-FR', { 
       hour: '2-digit', 
       minute: '2-digit'
@@ -82,9 +85,9 @@ export function updateDateTime() {
     const parts = formattedDate.split(' '); 
     const shortMonth = parts[1].substring(0, 4); 
     const finalDate = `${parts[0]} ${shortMonth} ${parts[2]}`;
-
-
-    datetime.innerHTML = `${finalDate} ${formattedTime}`;
+    
+    if(!isMobile) datetime.innerHTML = `${finalDate} ${formattedTime}`;
+    else datetime.innerHTML = `${formattedTime}`;
   }
 
 function toggleDropdownMenu(buttonId, menuId) {

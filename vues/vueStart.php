@@ -4,9 +4,8 @@
     
 
 
-    <video id="start_myos_video" class="start_myos_video" muted autoplay>
+    <video id="start_myos_video" class="start_myos_video" muted autoplay playsinline>
         <source src="img/MyOS_loading.mp4" type="video/mp4">
-        Your browser does not support the video tag.
     </video>
 
     <div class="full_screen" id="full_screen_slider">
@@ -38,17 +37,15 @@
         <div class="datetime" id="datetime"></div>
     </div>       
     <div class="container_profile">
-      <div class="landing-profile-container">
-          <div class="profile_image_contener">
-          
-          </div>
-          <p class="profile_name">RAPHAÊL GOSSET</p>
-        
-      </div>
+        <div class="landing-profile-container">
+            <div class="profile_image_contener"></div>
+            <p class="profile_name">RAPHAÊL GOSSET</p>
+            <p class="profile_subtitle">Fullstack Developper</p>
+        </div>
 
       <div class="landing-start-container">
         <h2 id="landing-start-button" class="landing-start-text">
-          <a class="start_button" href="index.php?page=accueil" >CONNECTION</a>
+          <a class="start_button" href="index.php?page=accueil" >LOGIN</a>
         </h2>
       </div>
 

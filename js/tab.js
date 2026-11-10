@@ -1,4 +1,4 @@
-import { update_file_explorer , openFolders, openShortcut,  loadTextFile, startLoadingAnimation} from './applicationHandler.js';
+import { update_file_explorer , openFolders, openShortcut,  loadTextFile, startLoadingAnimation, setupZoomAndDrag, setupResizeObserver} from './applicationHandler.js';
 
 import { load3DModel} from './meshHandler.js'; // Assurez-vous que le chemin est correct
 
@@ -250,31 +250,25 @@ export function createPictureSquare(parentElement, id, id2, id3, id4, background
     const imagePath = `img/illustrations/${id.replace('png_tab', '')}.png`;
 
     borderInnerContainer.innerHTML = `
-      <div class="content" id="content_${id}" style="display: flex; justify-content: center; align-items: center; overflow: auto; position: relative; height: 95%; top:5%;">
-        <img src="${imagePath}" alt="Image" id="image_${id}" class="image_" style="width: 100%; height: auto; transform: scale(0.5); transition: transform 0.2s ease-in-out;">
+      <div class="content" id="content_${id}" style="display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; height: 95%; top:5%;">
+        <img src="${imagePath}" alt="Image" id="image_${id}" class="image_" style="width: 100%; height: auto; transform: translate(-50%, -50%) scale(1); transition: transform 0.1s ease-in-out; position: absolute; top:50%; left:50%; ">
       </div>
-      <div class="footer_file_explorer" id="footer_file_explorer_${id}" style="top:0; display: flex; justify-content: center; align-items: center; padding: 5px;     box-shadow: 
+      <div class="footer_file_explorer" id="footer_file_explorer_${id}" style="top:0; display: flex; justify-content: center; align-items: center; padding: 5px; box-shadow: 
         inset 1px 1px 0px rgba(0, 0, 0, 1),
         inset -1px -1px 0px rgb(134, 133, 133);">
-        <input type="range" class="scale-slider" id="scaleSlider_${id}" min="0.1" max="2" step="0.01" value="0.2" oninput="document.getElementById('image_${id}').style.transform = 'scale(' + this.value + ')';">
-
+        <input type="range" class="scale-slider" id="scaleSlider_${id}" min="0.1" max="2" step="0.01" value="1">
       </div>
-
     `;
+
+    // Ajouter la gestion du zoom et du déplacement
+    setupZoomAndDrag(id);
+    setupResizeObserver(id);
   }
 
   return newSquare;
 }
 
 
-window.resizeImage = function(id, change) {
-  const img = document.getElementById(`image_${id}`);
-  if (img) {
-    let currentWidth = img.clientWidth;
-    let newWidth = currentWidth + change;
-    img.style.width = `${newWidth}px`;
-  }
-};
 
 
 export function createMusicSquare(parentElement, id, id2, id3, id4, backgroundImagePath, width, height, text) {
@@ -300,6 +294,8 @@ export function createMusicSquare(parentElement, id, id2, id3, id4, backgroundIm
       </div>
     `;
   }
+  
+  
 
   return newSquare;
 }
@@ -326,7 +322,7 @@ export function createTextSquare(parentElement, id, id2, id3, id4, backgroundIma
   return newSquare;
 }
 
-export function createPDFSquare(parentElement, id, id2, id3, id4, backgroundImagePath, width, height, text) {
+export function createShellSquare(parentElement, id, id2, id3, id4, backgroundImagePath, width, height, text) {
   
   const uniqueId = `${id}`;
 
@@ -339,9 +335,47 @@ export function createPDFSquare(parentElement, id, id2, id3, id4, backgroundImag
   if (borderInnerContainer) {
     borderInnerContainer.innerHTML = `
       <div class="content" id="content_${id}">
-        <embed  src="img/pdf/${id.replace("pdf_tab", '')}.pdf" width="100%" height="100%"/>
+        <textarea id="text_${id}" class="text_area"></textarea>
+        
       </div>
     `;
+  }
+  return newSquare;
+}
+
+export function createPDFSquare(parentElement, id, id2, id3, id4, backgroundImagePath, width, height, text) {
+  
+  const uniqueId = `${id}`;
+
+  // Appeler createSquare pour créer la base du "tab"
+  const newSquare = createSquare(parentElement, uniqueId, id2, id3, id4, backgroundImagePath, width, height, text);
+
+  // Sélectionner le conteneur principal où ajouter le contenu
+  const borderInnerContainer = document.getElementById(id3); // Correspond à `border-inner-contener`
+  
+  if (borderInnerContainer) {
+    const imagePath = `img/pdf/${id.replace('pdf_tab', '')}.png`;
+
+    borderInnerContainer.innerHTML = `
+      <div class="content" id="content_${id}" style="display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; height: 95%; top:5%;">
+        <img src="${imagePath}" alt="Image" id="image_${id}" class="image_" style="width: 100%; height: auto; transform: translate(-50%, -50%) scale(1); transition: transform 0.1s ease-in-out; position: absolute; top:50%; left:50%; ">
+      </div>
+      <div class="footer_file_explorer" id="footer_file_explorer_${id}" style="top:0; display: flex; justify-content: center; align-items: center; padding: 5px; box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);">
+        <input type="range" class="scale-slider" id="scaleSlider_${id}" min="0.1" max="2" step="0.01" value="1">
+ 
+      </div>
+      <a href="img/pdf/${id.replace("pdf_tab", '')}.pdf" download="${id.replace("pdf_tab", '')}.pdf">
+        <button class= "download_button">
+            <img class="download_icon" src="img/download_icon.png">
+        </button>
+      </a>
+    `;
+
+    // Ajouter la gestion du zoom et du déplacement
+    setupZoomAndDrag(id);
+    setupResizeObserver(id);
   }
 
   return newSquare;
@@ -565,43 +599,6 @@ export function IndexClickApplication(classname, rectangularBar) {
   });
 }
 
-import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.0.1/dist/purify.es.min.js';
-
-export function html_injector(path, id, className, newId) {
-  return new Promise((resolve, reject) => {
-    const element = document.getElementById(id);
-
-    if (!element) {
-      reject(new Error(`L'élément avec l'ID "${id}" est introuvable.`));
-      return;
-    }
-
-    fetch(path)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Erreur lors du chargement du fichier HTML : ${response.statusText}`);
-        }
-        return response.text();
-      })
-      .then((html) => {
-        if (html) {
-          element.innerHTML = html;
-
-          change_id(element, className, newId);
-
-          console.log(`Contenu HTML injecté dans l'élément avec l'ID "${id}".`);
-          resolve(); // Résolution de la promesse
-        } else {
-          throw new Error("Le contenu HTML récupéré est vide.");
-        }
-      })
-      .catch((error) => {
-        console.error(`Erreur lors de l'injection du contenu HTML : ${error.message}`);
-        reject(error); // Rejet de la promesse
-      });
-  });
-}
-
 export function change_id(parentElement, className, newId ) {
   if (parentElement && className && newId) {
     const targetElement = parentElement.querySelector(`.${className}`);
@@ -628,7 +625,7 @@ export function OpenApplication(id) {
       const extension = app.split('.').pop(); // Récupère l'extension du fichier
       const appName = app.replace('.', ''); // Supprime l'extension du nom du fichier
       console.log(app + ' ' + extension + ' ' + appName);
-
+      
       const createFunctionMap = {
         png: createPictureSquare,
         blend: create3DSquare,
@@ -668,7 +665,7 @@ export function OpenApplication(id) {
               width,
               height,
               app,
-              "https://github.com/zbeubizbeub"
+              "https://github.com/Raphv2"
             );
             console.log("Ouvert :", app);
           } else if (appName.replace('exe', '') == 'Linkedin') {
@@ -716,20 +713,19 @@ export function OpenApplication(id) {
   };
 
   if (isMobile) {
-    innerFoldersContainer.addEventListener('touchstart', function (e) {
+    innerFoldersContainer.addEventListener('touchstart', function (e) {//empecher le zoom
       const currentTime = new Date().getTime();
       const timeDiff = currentTime - lastClickTime;
 
       if (timeDiff < 300 && timeDiff > 0) {
         e.preventDefault();
-        handleClick(e); // Appelle la logique du double tap
       }
-
-      lastClickTime = currentTime;
+        lastClickTime = currentTime;
     }, { passive: false });
+    
+    innerFoldersContainer.addEventListener('touchend', handleClick, { passive: true });
   } else {
-    // Sur desktop, utilise dblclick
-    innerFoldersContainer.addEventListener('dblclick', handleClick);
+    innerFoldersContainer.addEventListener('dblclick', handleClick);//PC
   }
 }
 

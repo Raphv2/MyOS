@@ -313,11 +313,30 @@ export function startLoadingAnimation(id, path) {
    ###+#####++###++   
      +######+++++         
     `
+        const asciiArtSpirale = 
+    `            ===============     
+     ===+%@@      %@%*==    
+   ===+@   =========        
+  ==+% ===+#@%***%@*===     
+ ==+#  =+#@==+***+==#*===   
+ ===  ==# =+%%===*%+=+*===  
+ === === ==+ ===+==+== *==  
+ *==  ==  +==%%%==+=== ===  
+  +== *+== %++++*%==*# ===  
+  #*== #+===    ==+*% ==*#  
+   #*+== #*+++++*#   ==+#   
+     %*===         ===#@    
+        **+=======+**#      
+            @@@@@                
+    `
+
 
     if (id.includes("Github")) {
         textArea.value = asciiArtGithub + "\n" + loadingText + "\n";
     } else if (id.includes("Linkedin")) {
         textArea.value = asciiArtLinkedin + "\n" + loadingText + "\n";
+    }else if (id.includes("Spirale")) {
+        textArea.value = asciiArtSpirale + "\n" + loadingText + "\n";
     }
   
     
@@ -328,10 +347,121 @@ export function startLoadingAnimation(id, path) {
     const iconElement = document.getElementById(`${id.replace('_tab', '')}_icon`);
     console.log(id);
     if (tabElement) {
-        tabElement.remove(); // Supprime la div si elle existe
+        tabElement.remove(); 
         iconElement.remove();
     }
     window.open(path, '_blank');
+}
+
+//images
+export function setupZoomAndDrag(id) {
+  const slider = document.getElementById(`scaleSlider_${id}`);
+  const image = document.getElementById(`image_${id}`);
+  const container = document.getElementById(`content_${id}`);
+
+  let scale = 1;
+  let posX = 0, posY = 0;
+  let isDragging = false;
+  let startX, startY;
+  let initialDistance = 0;
+  let initialScale = 1;
+
+  if (slider && image && container) {
+    image.addEventListener("dragstart", (event) => event.preventDefault());
+
+    slider.addEventListener("input", () => {
+      scale = parseFloat(slider.value);
+      updateTransform();
+    });
+
+    container.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const zoomSpeed = 0.1;
+      const rect = image.getBoundingClientRect();
+      const offsetX = (event.clientX - rect.left) / rect.width;
+      const offsetY = (event.clientY - rect.top) / rect.height;
+      const oldScale = scale;
+      scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed;
+      scale = Math.min(Math.max(scale, 0.1), 2);
+      posX -= (offsetX - 0.5) * image.width * (scale - oldScale);
+      posY -= (offsetY - 0.5) * image.height * (scale - oldScale);
+      updateTransform();
+      slider.value = scale;
+    });
+
+    image.addEventListener("mousedown", (event) => {
+      isDragging = true;
+      startX = event.clientX - posX;
+      startY = event.clientY - posY;
+    });
+
+    document.addEventListener("mousemove", (event) => {
+      if (!isDragging) return;
+      posX = event.clientX - startX;
+      posY = event.clientY - startY;
+      updateTransform();
+    });
+
+    document.addEventListener("mouseup", () => isDragging = false);
+
+    // Gestion du tactile
+    let lastTouch = null;
+    container.addEventListener("touchstart", (event) => {
+      if (event.touches.length === 1) {
+        isDragging = true;
+        lastTouch = event.touches[0];
+      } else if (event.touches.length === 2) {
+        isDragging = false;
+        initialDistance = getDistance(event.touches[0], event.touches[1]);
+        initialScale = scale;
+      }
+    });
+
+    container.addEventListener("touchmove", (event) => {
+      event.preventDefault();
+      if (event.touches.length === 1 && isDragging) {
+        let touch = event.touches[0];
+        posX += touch.clientX - lastTouch.clientX;
+        posY += touch.clientY - lastTouch.clientY;
+        lastTouch = touch;
+        updateTransform();
+      } else if (event.touches.length === 2) {
+        let newDistance = getDistance(event.touches[0], event.touches[1]);
+        scale = Math.min(Math.max(initialScale * (newDistance / initialDistance), 0.1), 2);
+        updateTransform();
+        slider.value = scale;
+      }
+    });
+
+    container.addEventListener("touchend", () => isDragging = false);
+
+    function getDistance(touch1, touch2) {
+      return Math.sqrt((touch1.clientX - touch2.clientX) ** 2 + (touch1.clientY - touch2.clientY) ** 2);
+    }
+
+    function updateTransform() {
+      image.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+  }
+}
+
+export function setupResizeObserver(id) {
+  const container = document.getElementById(`content_${id}`);
+  const image = document.getElementById(`image_${id}`);
+
+  if (container && image) {
+    const resizeObserver = new ResizeObserver(() => {
+      centerImage();
+    });
+
+    resizeObserver.observe(container);
+  }
+
+  function centerImage() {
+    image.style.left = "50%";
+    image.style.top = "50%";
+    image.style.transform = `translate(-50%, -50%) scale(1)`;
+  }
 }
 
 

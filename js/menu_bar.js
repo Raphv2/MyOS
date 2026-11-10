@@ -1,16 +1,10 @@
 const swup = window.swup;
 
 import * as t  from './tab.js';
-import * as d  from './scroll_bar.js';
 
 export function tab(offSetX, offSetY, height, width, isMobile) {
   
   if(!isMobile) t.enableDrag2("new-square", offSetX, offSetY);
-
-
-
-  d.updateThumb();
-  
 
 
   const observer = new MutationObserver(() => {
@@ -32,7 +26,7 @@ export function openFiles(rectangularBar, screen, width, height, isMobile) {
  
 
   const handleClick = async (e) => {
-    let menuItem = e.target.closest('.menu_item');
+    let menuItem = e.target.closest('.menu_item, .spirale');
     let num;
 
     if (menuItem) {
@@ -85,7 +79,7 @@ export function openFiles(rectangularBar, screen, width, height, isMobile) {
                 width,
                 height,
                 app,
-                "https://github.com/zbeubizbeub"
+                "https://github.com/Raphv2"
               );
               console.log("Ouvert exe:", app);
             } else if (appName.replace('exe', '') == 'Linkedin') {
@@ -102,7 +96,23 @@ export function openFiles(rectangularBar, screen, width, height, isMobile) {
                 "https://www.linkedin.com/in/raphael-gosset/"
               );
               console.log("Ouvert exe:", app);
-            }
+            }else if (appName.replace('exe', '') == 'Spirale') {
+            t.createOtherSquare(
+              screen,
+              `${appName}_tab`,
+              `${appName}_icon`,
+              `${appName}_border_inner_contener`,
+              `${appName}_inner_contener`,
+              '',
+              width,
+              height,
+              app,
+              isMobile 
+              ? "intent://send/?to=raphaelgosset.pro@gmail.com&subject=Demande%20de%20contact#Intent;scheme=mailto;package=com.google.android.gm;end"
+              : `https://mail.google.com/mail/?view=cm&fs=1&to=raphaelgosset.pro@gmail.com&su=Demande%20de%20contact`
+            );
+            console.log("Ouvert :", app);
+          }
             t.createSquare(
               screen,
               `${appName}_tab`,
@@ -132,28 +142,26 @@ export function openFiles(rectangularBar, screen, width, height, isMobile) {
         t.createExplorerSquare(screen, `${menuItem.id}_tab`, `id_${menuItem.id}_icon`, `id_${menuItem.id}_border_inner_contener`, `id_${menuItem.id}_inner_contener`, '', width, height, 'file explorer');
         t.createDiv(`id_${menuItem.id}_icon`, "application", '', rectangularBar, 'img/directory.png', '', '');
       }
-      t.addRecentFiles(menuItem);
+      console.log('menuitem', menuItem);
+      if(menuItem.id !== 'Spirale.exe') t.addRecentFiles(menuItem);
     }
   };
-
-  // Fonction pour gérer le double tap
   if (isMobile) {
-    // Sur mobile, détecte un double tap avec un délai
-    document.addEventListener('touchstart', function (e) {
+    document.addEventListener('touchstart', function (e) {//empecher le zoom
       const currentTime = new Date().getTime();
       const timeDiff = currentTime - lastClickTime;
 
-      if (timeDiff < 300 && timeDiff > 0) {  // Si l'écart entre les clics est inférieur à 300ms
-        e.preventDefault(); // Empêche le comportement par défaut (zoom, etc.)
-        handleClick(e); // Appelle la logique du double tap
+      if (timeDiff < 300 && timeDiff > 0) {
+        e.preventDefault();
       }
-
-      lastClickTime = currentTime;
+        lastClickTime = currentTime;
     }, { passive: false });
+    
+    document.addEventListener('touchend', handleClick, { passive: true });
   } else {
-    // Sur desktop, utilise dblclick
-    document.addEventListener('dblclick', handleClick);
+    document.addEventListener('dblclick', handleClick);//PC
   }
+
 }
 
 

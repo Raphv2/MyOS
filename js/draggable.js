@@ -9,29 +9,32 @@ export function positionMenuItems(minHeight, minWidth, maxHeight, maxWidth, step
 
     const usedPositions = [];
 
-    // Récupérer la position et la taille du widget en pixels
-    const widget = document.getElementById('eye_widget');
-    if (!widget) {
+    // Récupération des deux widgets à éviter
+    const widgets = ['eye_widget', 'contact_us', 'profile_widget']
+        .map(id => document.getElementById(id))
+        .filter(el => el !== null); // garder seulement ceux qui existent
 
+    if (widgets.length === 0) {
         return;
     }
 
-    const widgetRect = widget.getBoundingClientRect();
+    // Calcul des zones à éviter pour chaque widget
+    const forbiddenZones = widgets.map(widget => {
+        const rect = widget.getBoundingClientRect();
+        const bounds = {
+            left: (rect.left / window.innerWidth) * 100,
+            top: (rect.top / window.innerHeight) * 100,
+            width: (rect.width / window.innerWidth) * 100,
+            height: (rect.height / window.innerHeight) * 100
+        };
+        bounds.right = bounds.left + bounds.width;
+        bounds.bottom = bounds.top + bounds.height;
+        return bounds;
+    });
 
-    // Convertir en vw/vh
-    const widgetBounds = {
-        left: (widgetRect.left / window.innerWidth) * 100,  // en vw
-        top: (widgetRect.top / window.innerHeight) * 100,   // en vh
-        width: (widgetRect.width / window.innerWidth) * 100,  // en vw
-        height: (widgetRect.height / window.innerHeight) * 100 // en vh
-    };
-
-    widgetBounds.right = widgetBounds.left + widgetBounds.width;
-    widgetBounds.bottom = widgetBounds.top + widgetBounds.height;
-
-    menuItems.forEach((item, index) => {
+    menuItems.forEach((item) => {
         let left, top;
-        let tries = 0; // Pour éviter une boucle infinie
+        let tries = 0;
 
         do {
             left = getRandomPosition(minWidth, maxWidth, stepWidth);
@@ -43,12 +46,17 @@ export function positionMenuItems(minHeight, minWidth, maxHeight, maxWidth, step
                 break;
             }
         } while (
-            // Vérifier si la position chevauche le widget
-            (left + 10 > widgetBounds.left && left < widgetBounds.right &&
-             top + 7 > widgetBounds.top && top < widgetBounds.bottom) ||
-            // Vérifier si la position est déjà utilisée
+            forbiddenZones.some(zone =>
+                left > zone.left - 10 &&                     // marge gauche
+                left < zone.right + 10 &&                    // marge droite
+                top > zone.top - zone.height * 0.5 - 5 &&    // marge haut selon taille
+                top < zone.bottom + zone.height * 0.5 + 5    // marge bas selon taille
+            ) ||
+            // **Évite les positions déjà utilisées**
             usedPositions.some(pos => pos.left === left && pos.top === top)
         );
+        
+        
 
         usedPositions.push({ left, top });
 

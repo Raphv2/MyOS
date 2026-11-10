@@ -2,6 +2,7 @@
     <img class="power_button" src="img\power_button.png" alt="power_button" id="power_button">
     <img class="logo_myos" src="img\logo_myos.png" alt="logo_myos" >
     <img class="source_button" src="img\source_button.png" alt="source_button" >
+    <img class="fullscreen_postIt" src="img\fullscreen.png" alt="fullscreen_postIt" >
 </div>
 
 <script>

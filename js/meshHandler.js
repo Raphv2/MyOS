@@ -1,7 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/GLTFLoader.js';
 
-
 export async function load3DModel(container, mesh) {
     if (!container) {
         console.error("Le container est invalide.");
@@ -34,13 +33,15 @@ export async function load3DModel(container, mesh) {
             }
         });
 
-        // Appliquer une rotation uniforme sur tout le modèle pour l'orienter dans la même direction
-        const rotationAngle = Math.PI / 2;  // 90 degrés en radians, par exemple, pour orienter l'objet sur un axe
-        model.rotation.set(0, rotationAngle, 0);  // Rotation autour de l'axe Y (tu peux ajuster cela)
+        const rotationAngle = Math.PI / 2; // 90 degrés en radians
+        model.rotation.set(0, rotationAngle, 0);
 
         const pointLight = new THREE.PointLight(0xffffff, 1, 100);
         pointLight.position.set(0, 20, 20);
         scene.add(pointLight);
+
+        const ambientLight = new THREE.AmbientLight(0x404040); 
+        scene.add(ambientLight);
 
         model.scale.set(1, 1, 1);
         model.position.set(0, 5, 0);
@@ -48,36 +49,28 @@ export async function load3DModel(container, mesh) {
 
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3()).length(); // Taille de l'objet
+        const size = box.getSize(new THREE.Vector3()).length();
 
-        // Positionner la caméra plus près de l'objet
         camera.position.set(center.x, center.y + (size * 0.5), center.z + (size * 0.5));
         camera.lookAt(center);
 
-        let isMouseDown = false;
-        let previousMousePosition = { x: 0, y: 0 };
-
         const mixer = new THREE.AnimationMixer(model);
-
-        if(gltf.animations.length !== 0){
-            for(let i = 0; i < gltf.animations.length; i++){
+        if (gltf.animations.length !== 0) {
+            for (let i = 0; i < gltf.animations.length; i++) {
                 mixer.clipAction(gltf.animations[i]).setDuration(4).play();
             }
         }
 
         const clock = new THREE.Clock();
-        let t = 0;
         loop();
 
         function loop() {
             requestAnimationFrame(loop);
             const dt = clock.getDelta();
-            t += dt;
             mixer.update(dt);
             renderer.render(scene, camera);
         }
 
-        // Observer les changements de taille du container
         const resizeObserver = new ResizeObserver(() => {
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -85,10 +78,12 @@ export async function load3DModel(container, mesh) {
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
         });
-
         resizeObserver.observe(container);
 
-        // Gestion des mouvements de la caméra
+        // Gestion des mouvements de la caméra avec la souris
+        let isMouseDown = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
         container.addEventListener('mousemove', (event) => {
             if (isMouseDown) {
                 const deltaX = event.clientX - previousMousePosition.x;
@@ -100,7 +95,7 @@ export async function load3DModel(container, mesh) {
         });
 
         container.addEventListener('mousedown', (event) => {
-            if (event.button === 0) { // Bouton gauche de la souris
+            if (event.button === 0) {
                 isMouseDown = true;
             }
         });
@@ -111,24 +106,69 @@ export async function load3DModel(container, mesh) {
             }
         });
 
+        // Gestion du zoom avec la molette de la souris
         container.addEventListener('wheel', (event) => {
             event.preventDefault();
-
-            // Calculer la direction de la caméra vers le centre de l'objet
             const direction = new THREE.Vector3();
             camera.getWorldDirection(direction);
-            direction.normalize(); // Normaliser la direction
-
-            // Ajuster la position de la caméra en fonction de la molette
-            const zoomSpeed = 0.05; // Vitesse de zoom
+            direction.normalize();
+            const zoomSpeed = 0.05;
             camera.position.addScaledVector(direction, event.deltaY * zoomSpeed);
         });
+
+        // Gestion des gestes tactiles pour le zoom et la rotation
+        let initialDistance = 0;
+        let initialAngle = 0;
+        let isPinching = false;
+
+        container.addEventListener('touchstart', (event) => {
+            if (event.touches.length === 2) {
+                isPinching = true;
+                initialDistance = getDistance(event.touches[0], event.touches[1]);
+                initialAngle = Math.atan2(event.touches[1].clientY - event.touches[0].clientY,
+                                            event.touches[1].clientX - event.touches[0].clientX);
+            } else if (event.touches.length === 1) {
+                // Enregistrer l'angle initial pour un seul doigt
+                initialAngle = Math.atan2(event.touches[0].clientY - center.y,
+                                           event.touches[0].clientX - center.x);
+            }
+        });
+
+        container.addEventListener('touchmove', (event) => {
+            if (isPinching && event.touches.length === 2) {
+                const currentDistance = getDistance(event.touches[0], event.touches[1]);
+                const zoomFactor = currentDistance / initialDistance;
+
+                // Ajuster la position de la caméra
+                const direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                direction.normalize();
+                camera.position.addScaledVector(direction, (zoomFactor - 1) * 0.5);
+            } else if (event.touches.length === 1) {
+                // Rotation avec un seul doigt
+                const deltaX = event.touches[0].clientX - previousMousePosition.x;
+                const deltaY = event.touches[0].clientY - previousMousePosition.y;
+            
+                model.rotation.y += deltaX * 0.01; 
+                model.rotation.x += deltaY * 0.01; 
+            
+                previousMousePosition = { x: event.touches[0].clientX, y: event.touches[0].clientY }; 
+            }
+        });
+
+        container.addEventListener('touchend', (event) => {
+            if (event.touches.length < 2) {
+                isPinching = false;
+            }
+        });
+
+        function getDistance(touch1, touch2) {
+            const dx = touch2.clientX - touch1.clientX;
+            const dy = touch2.clientY - touch1.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
 
     } catch (error) {
         console.error("Erreur lors du chargement du fichier GLB :", error);
     }
 }
-
-
-
-

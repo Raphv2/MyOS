@@ -1,5 +1,9 @@
-import Swup from 'https://unpkg.com/swup@4?module';
-const swup = new Swup();
+//import Swup from 'https://unpkg.com/swup@4?module';
+
+//const swup = new Swup();
+
+import * as SwupModule from "https://unpkg.com/swup@4?Module";
+console.log(SwupModule);
 
 import {MoveCursor}  from './custom_cursor.js';
 
@@ -37,6 +41,10 @@ if (fullScreen) {
 }
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+setInterval(() => {
+  d.updateDateTime(isMobile);
+}, 1000);
 
 if(isMobile){
     fullScreen = true;
@@ -106,38 +114,32 @@ function init(minHeight, minWidth, maxHeight, maxWidth, stepHeight, stepWidth, o
     }
     MoveCursor();
     delay(1000).then(() => {
-        d.updateDateTime();
 
-        d.generateDesktopMenu(width, height).then(() => {
+
+        d.generateDesktopMenu(width, height, isMobile).then(() => {
             initialize(minHeight, minWidth, maxHeight, maxWidth, stepHeight, stepWidth, offSetX, offSetY,isMobile); 
         });
     });
 }
 
-document.addEventListener('swup:animation-out-start', () => t.transition_start);
-document.addEventListener('swup:animation-in-end', () => t.transition_end);
+//document.addEventListener('swup:animation-out-start', () => t.transition_start);
+//document.addEventListener('swup:animation-in-end', () => t.transition_end);
 
-if (document.readyState === 'complete') {
+
+document.addEventListener('DOMContentLoaded', () => {
     
     init(minHeight, minWidth, maxHeight, maxWidth, stepHeight, stepWidth, offSetX, offSetY);
-    m.tab(offSetX, offSetY, width, height, isMobile); // Déplacez ici pour qu'il ne soit appelé qu'après le chargement du DOM
-    
-} else {
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        init(minHeight, minWidth, maxHeight, maxWidth, stepHeight, stepWidth, offSetX, offSetY);
-        m.tab(offSetX, offSetY, width, height, isMobile); // Déplacez ici pour qu'il ne soit appelé qu'après le chargement du DOM
-    });
-}
+    m.tab(offSetX, offSetY, width, height, isMobile); 
+});
 
-if (swup?.hooks?.on) {
+
+/*if (swup?.hooks?.on) {
     swup.hooks.on('page:view', () => {
         init(minHeight, minWidth, maxHeight, maxWidth, stepHeight, stepWidth, offSetX, offSetY);
-        
     }
 
     );
-}  
+}  */
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));

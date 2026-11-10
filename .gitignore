@@ -32,3 +32,9 @@ out/
 # Fichiers du serveur
 *.pid
 *.sock
+
+# Ne jamais versionner (prod)
+error_log.txt
+*.zip
+.trash/
+*.sql

@@ -14,6 +14,7 @@ body {
     width: 100%;
     background-color: #0e0e0e;
     overflow: hidden;
+    touch-action: manipulation;
 }
 
 
@@ -67,7 +68,7 @@ html.is-animating .transition-video {
 }
 
 .buttons {
-
+    
     padding: 0;
     margin: 0; 
     width: 100%;
@@ -97,7 +98,7 @@ html.is-animating .transition-video {
 
     
     margin: 0;
-    width:7%;
+    width:1.5%;
     min-width: 20px;
     height: auto;
     position: absolute;
@@ -106,6 +107,20 @@ html.is-animating .transition-video {
     top: 40%;
     
 }
+
+.fullscreen_postIt{
+    margin: 0;
+    width:9%;
+    min-width: 20px;
+    height: auto;
+    position: absolute;
+    left: 3%;
+    cursor: none;
+    top: -30%;
+    transform: rotate(9deg);
+}
+
+
 
 .logo_myos{
 
@@ -323,7 +338,7 @@ footer {
     background-image: url('../img/screenBackground2.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-
+    
     animation: lightUp 2s infinite alternate;
     
 }
@@ -480,49 +495,58 @@ footer {
 
 
 
-
 .landing-start-container {
-    position: relative; 
-    top: 0; 
+    margin-top: 1vh;
     text-align: center;
-  
-    background-color: #212121;
-    
-    border: 0.15vw solid #292929;
-    border-radius: 5px;
-
-    
-
-    
+    background-color: #C5292B;
     width: 50%;
     height: 4vh;
     font-size: 50%;
+    box-shadow: -2px -2px 0 2px #D46A6C; 
+    position: relative; /* pour l’::after */
+}
+
+/* Bord droit + bas simulés en vert, plats (pas en angle) */
+.landing-start-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 2px);  /* pour éviter l’angle avec le bord gauche */
+    height: calc(100% - 2px); /* pour éviter l’angle avec le bord haut */
+    box-shadow: 2px 2px 0 2px #9F2426; 
+    
+    /*border-bottom: solid 5px #9F2426;*/
+    /*border-right: solid 5px #9F2426;*/
+    pointer-events: none; /* pour éviter les soucis de clic */
 }
 
 
 .landing-start-text:hover{
     background-color: #fc4141;
-    box-shadow: 0px 0px 5px #ff0000,0 0 3px rgb(255, 255, 255),
-    inset -5px -5px 3px rgba(0, 0, 0, 0.5),
-    inset 5px 5px 3px #ffffff66;
+
    
 }
 
 .landing-start-text {
-    background-color: #ee0000;
-    box-shadow:     
-    inset -5px -5px 3px rgba(0, 0, 0, 0.5),
-    inset 5px 5px 3px #ffffff66;
-    border-radius: 5px;
-    position: absolute;
+    background-color: #C5292B;
     margin: 0;
     padding: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
+    /* SUPPRIMER : position absolute + transform */
+    /* position: absolute; */
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+
     width: 100%;
     height: 100%;
+
+    display: flex; 
+    justify-content: center;
+    align-items: center;
 }
+
 
 .start_button {
     display: flex; 
@@ -534,8 +558,10 @@ footer {
     color: #efefef;
     width: 100%;
     height: 100%;
+    text-decoration: none;
     cursor: none;
 }
+
 
 .landing-profile-container {
     position: relative; /* Gardez cette propriété pour que les éléments internes soient positionnés relativement */
@@ -546,28 +572,24 @@ footer {
     gap: 10px; /* Ajoute un espace entre les enfants pour éviter le chevauchement */
 }
 .container_profile {
-    position: fixed; /* Changez de 'relative' à 'fixed' pour le positionnement par rapport à la fenêtre du navigateur */
-    bottom: 50%; /* Positionne le conteneur en bas de la fenêtre */
-    left: 50%; /* Aligne le conteneur au centre de la fenêtre */
-    transform: translate(-50%, 50%); /* Déplace le conteneur vers la gauche de 50% de sa largeur pour le centrer */
+    position: fixed;
+    top: 50%;        /* centre verticalement */
+    left: 50%;       /* centre horizontalement */
+    transform: translate(-50%, -50%); /* centre exact en X et Y */
     background-color: #EFEFEF;
-    height: 40vh;
+    min-height: 45vh;
+height: auto;
     width: 30vw;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centre les enfants horizontalement */
-
-    z-index: 1; /* Assurez-vous que le conteneur est au-dessus des autres éléments */
+    align-items: center;
+    z-index: 1;
     color: #212121;
-
-    border-radius: 5px ;
-
+    border-radius: 5px;
     box-shadow: 
-    inset 1px 1px 0px rgba(0, 0, 0, 1),
-    inset -1px -1px 0px rgba(134, 133, 133);
-
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgba(134, 133, 133);
     animation: fadeInAndOut 3.5s ease-in-out forwards;
-
 }
 
 
@@ -586,32 +608,68 @@ footer {
 
 
 
+/* Conteneur de tout le profil */
+#raph_dropdown {
+    flex-direction: column;
+    align-items: center; /* centre horizontalement */
+    padding: 2vh 1vw;
+    overflow: hidden;
+    width: 29vw;
+    height: 23vh;
+}
+
+.raph_name {
+    font-size: 1.5vh;
+}
+
+
+/* Image de profil */
 .profile_image_contener {
-    width: 10vw; /* Gardez cette largeur */
-    height: 10vw; /* Gardez cette hauteur */
+    width: 10vw;
+    height: 10vw;
     background-image: url("../img/profile.png");
     background-size: cover;
+    background-position: center;
+    margin-top: 2vh;
     border: 5px solid #EFEFEF;
-    
-    margin-top: 4vh; /* Ajoute un espace entre l'image et le texte */
     box-shadow: 
         1px 1px 0px rgba(0, 0, 0, 1),
         -1px -1px 0px rgb(130, 130, 130),
         inset 2px 2px 0px rgba(0, 0, 0, 1),
         inset -2px -2px 0px rgb(130, 130, 130);
-    z-index: 2; /* Pour s’assurer que l’image est bien au-dessus */
-    display: flex; /* Ajouté pour centrer le contenu s'il y en a */
-    align-items: center; /* Centre le contenu s'il y en a */
-    justify-content: center; /* Centre le contenu s'il y en a */
+    margin-bottom: 1vh; /* espace sous l'image */
 }
 
-.profile_name {
-    position: relative; /* Changez de 'absolute' à 'relative' */
-    margin-top: 10px; /* Ajoute un espace au-dessus du texte */
-    font-size: 0.7vw;
-    text-align: center;
-    z-index: 1; /* Assure que le texte ne chevauche pas l’image */
+.profile_image_dropdown{
+    width: 5vw;
+    height: 5vw;
+    background-image: url("../img/profile.png");
+    background-size: cover;
+    background-position: center;
     
+    border: 5px solid #EFEFEF;
+    box-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 1),
+        -1px -1px 0px rgb(130, 130, 130),
+        inset 2px 2px 0px rgba(0, 0, 0, 1),
+        inset -2px -2px 0px rgb(130, 130, 130);
+    margin-bottom: 1vh; /* espace sous l'image */
+}
+
+/* Nom du profil */
+.profile_name {
+    font-size: 1vw;
+    text-align: center;
+    margin: 0 0 0.5vh 0; /* marge sous le nom */
+    margin-bottom: 1vh; /* espace sous l'image */
+}
+
+/* Description du profil */
+.profile_subtitle {
+    font-size: 0.5vw;
+    text-align: center; /* ou left si tu préfères */
+    margin: 0;
+    line-height: 1.5;
 }
 
 
@@ -630,6 +688,7 @@ footer {
     align-items: center;
     padding: 0 1vw;
     z-index: 50;
+    overflow: hidden;
     
     box-shadow: 
     
@@ -737,7 +796,7 @@ footer {
 
     top: 50%;
     transform: translateY(-50%);
-    width: 8vw;
+    width: 9vw;
     height: 95%;
    
     padding-left: 0.5vw;
@@ -754,7 +813,7 @@ footer {
     inset 1px 0px 0px rgba(0, 0, 0, 1),
     inset -1px 0px 0px rgb(130, 130, 130);
 
-    line-height: 1.1; /* Espacement entre l'heure et la date */
+    line-height: 1.1; 
 
     font-size: 50%;
 
@@ -859,11 +918,11 @@ footer {
     border-bottom-right-radius: 5px; 
 }
 
-.dropdown_menu .profile_image_contener{
-    position: absolute;
-    width: 5vw;
-    height: 5vw;
-}
+/*.dropdown_menu .profile_image_contener{*/
+/*    position: absolute;*/
+/*    width: 5vw;*/
+/*    height: 5vw;*/
+/*}*/
 
 .dropdown_menu.show  {
     display: block;
@@ -954,17 +1013,16 @@ footer {
     height: 1.5vw;
     width: 1.5vw;
     padding: 0.3vw;
-    background-color: #ee0000;
-    box-shadow:     inset -5px -5px 3px rgba(0, 0, 0, 0.5),
-    inset 5px 5px 3px #ffffff66;
+    background-color: #C5292B;
+    box-shadow: 
+    -2px -2px 0 2px #D46A6C,
+    2px 2px 0 2px #9F2426;
 
-
-    border-radius: 5px;
 
 }
 
 #shutdown img {
-    width: 40%;
+    width: 60%;
     height: auto;
     position: absolute;
     top: 50%;
@@ -976,9 +1034,6 @@ footer {
 #shutdown:hover{
 
     background-color: #fc4141;
-    box-shadow: 0px 0px 5px #ff0000,0 0 3px rgb(255, 255, 255),
-    inset -5px -5px 3px rgba(0, 0, 0, 0.5),
-    inset 5px 5px 3px #ffffff66;
        
     
 }
@@ -1095,7 +1150,7 @@ footer {
   
   /* Styles pour la div carrée */
   .new-square {
-
+    resize: both;
     position: relative; /* Permet de positionner l'élément indépendamment des autres */
     top: 50%; /* Centrage vertical */
     left: 50%; /* Centrage horizontal */
@@ -1309,13 +1364,12 @@ footer {
     inset -1px -1px 0px rgb(134, 133, 133);
 }
 
-.widget {
+.widget{
    
     height: 20vh; 
     width: 12vw; 
     position: absolute; 
-    left: 65.895vw; 
-    top: 6.8057vh; 
+
     
     
     margin-top: 0; /* Plus besoin de margin-top */
@@ -1332,8 +1386,35 @@ footer {
     border-radius: 5px;
 
 }
+#eye_widget{
+    
+    left: 65.895vw; 
+    top: 6.8057vh; 
+}
 
- 
+#contact_us{
+    
+    left: 65.895vw; 
+    top: 48.8057vh; 
+}
+
+#profile_widget{
+    left: 1vw; 
+    top: 40.8057vh; 
+    width: 30vw;
+    height: 30vh;
+} 
+
+#content_profile_widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* centre horizontalement */
+    justify-content: center; /* centre verticalement */
+    height: 100%;
+    width: 100%;
+    text-align: center;     /* optionnel mais utile pour tes <p> */
+}
+
 
 #inner_application6 {
     display: flex;
@@ -1372,7 +1453,7 @@ footer {
     
     display: flex;
     flex-direction: row;
-    height: 80%; /* Prend 80% de la hauteur totale */
+    height: 100%; /* Prend 80% de la hauteur totale */
     width: 100%; /* S'étend sur toute la largeur */
     
 }
@@ -1380,7 +1461,7 @@ footer {
 .header {
     position: relative;
     background-color: #EFEFEF; /* Couleur de la section header */
-    height: 20%; /* Prend 20% de la hauteur totale */
+    height: 5%; /* Prend 20% de la hauteur totale */
     width: 100%; /* S'étend sur toute la largeur */
     display: flex;
     align-items: center;
@@ -1461,15 +1542,15 @@ input {
 
 .row_explorer {
     width: 70%;
-    height: 20%;
+    height: 60%;
     display: flex;
     justify-content: flex-start;
     gap: 1%;
 
     position: absolute; /* Permet de le positionner par rapport au parent */
-    bottom: 0; /* Le colle en bas */
-    left: 0; /* Le colle à gauche */
-    margin: 1%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 1%;
 }
 
 
@@ -1697,9 +1778,8 @@ details details {
     
 }
 
-#content_eye_widget{
+#content_eye_widget, #content_profile_widget, #content_contact_widget{
     overflow: hidden;
-
 }
 canvas{
     height: 100%;
@@ -1733,7 +1813,7 @@ canvas{
     width: 20%;
     height: 8px;
     background: #212121;
-    border-radius: 0;
+    border-radius: 5px;
     cursor: none;
     -webkit-appearance: none; /* Supprime le style par défaut sur Chrome/Safari */
     appearance: none;
@@ -1749,7 +1829,7 @@ canvas{
     width: 15px;
     height: 15px;
     background: #efefef;
-    border-radius: 0;
+    border-radius: 5px;
     cursor: none;
     box-shadow: 
     inset 1px 1px 0px rgba(0, 0, 0, 1),
@@ -1761,13 +1841,39 @@ canvas{
     width: 15px;
     height: 15px;
     background: #efefef;
-    border-radius: 0;
+    border-radius: 5px;
     cursor: none;
     box-shadow: 
     inset 1px 1px 0px rgba(0, 0, 0, 1),
     inset -1px -1px 0px rgb(134, 133, 133);
 }
 
+
+.download_button{
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    
+    width: 40px;
+    height: 40px;
+    background: #efefef;
+    border-radius: 5px;
+    cursor: none;
+    -webkit-appearance: none; /* Supprime le style par défaut sur Chrome/Safari */
+    appearance: none;
+    box-shadow: 
+        inset 1px 1px 0px rgba(0, 0, 0, 1),
+        inset -1px -1px 0px rgb(134, 133, 133);
+}
+
+.download_icon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -45%);
+    width: 50%;
+    height: 50%;
+}
 
 @media (max-width: 1000px) {
     body {
@@ -1813,25 +1919,47 @@ canvas{
     
     }
     
-    .widget{
+    #eye_widget, #profile_widget{
         display: none ;
         pointer-events: none;
     }
     
+    #contact_us{
+        width: 40vw;
+        height: 20vh;
+        left: 57vw;
+        top: 55vh;
+    }
+    
+    #contact_border_inner_contener{
+        height: 85%;
+        margin-top: 4%;
+    }
+    #contact_border_inner_contener p {
+        font-size: 1vh !important;
+    }
     .datetime{
-        height: 2vh;
-        font-size: 100%;
-        width: 25vw;
+        height: 1vh;
+        font-size: 150%;
+        width: 10vw;
         right: 2vw;
+        top: 50%;
+        transform: translateY(-50%);
     }
     
     .name_container{
-        width: 25vw;
+        width: 28vw;
         height: 100%;
         font-size: 100%;
         left: 27vw;
         
     }
+    .arrow_slide{
+
+    height: 1.4vh;
+    width: 1.4vh;
+    right: 0.4vw;
+}
     
     #name_container_button2{
          width: 15vw;
@@ -1859,9 +1987,24 @@ canvas{
     
     .container_profile{
         width: 60vw;
-        height: 62vw ;
+        height: 65vw ;
     }
     
+    #raph_dropdown{
+        width: 60vw;
+    }
+    
+    .profile_subtitle {
+        font-size: 1vh;
+        text-align: center; /* ou left si tu préfères */
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .landing-start-container{
+        margin-top: 1vh;
+        height: 10vh;
+    }
     .profile_image_contener{
         width: 15vh;
         height: 15vh;
@@ -1869,11 +2012,12 @@ canvas{
     }
     
     .profile_name{
-        font-size: 1vh;
+        font-size: 1.2vh;
     }
     
     .start_button{
-        font-size: 1.5vw ;
+
+        font-size: 1vh ;
     }
     
     #shutdown{
@@ -1901,7 +2045,7 @@ canvas{
     
     .application_name {
       left: 1vh;
- 
+    font-size: 0.8vh;
     }
     
     .minus_button, .full_screen_btn, .close-btn {
