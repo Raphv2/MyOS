@@ -1982,20 +1982,36 @@ body:not(.is-mobile) #raph_dropdown .profile_bio {
   color: var(--term-green);
   text-shadow: var(--term-glow);
   user-select: none;
+  /* iPhone : Safari grossit tout seul les petits textes des pages sans viewport (980 px),
+     ce qui faisait déborder la ligne de progression. On garde les tailles calculées. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 .link-art {
   margin: 0;
   font-family: var(--mono);
+  font-size: 1.2vw; /* repli si le navigateur ne connaît pas les unités cqw/cqh */
   font-size: min(2.6cqw, 4.4cqh);
   line-height: 1;
   white-space: pre;
   text-align: left;
 }
+body.is-mobile .link-art {
+  font-size: 2.4vw;
+  font-size: min(2.6cqw, 4.4cqh);
+}
 .link-status {
+  max-width: 96%;
+  overflow: hidden;
   font-family: var(--pixel);
+  font-size: 0.7vw;
   font-size: min(1.55cqw, 3.4cqh);
   line-height: 1.6;
   white-space: pre;
+}
+body.is-mobile .link-status {
+  font-size: 1.4vw;
+  font-size: min(1.5cqw, 3.4cqh);
 }
 
 @media (prefers-reduced-motion: reduce) {
