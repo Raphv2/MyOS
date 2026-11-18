@@ -245,7 +245,7 @@ body.is-fullscreen .full_screen {
   flex: none;
   font-family: var(--pixel);
   font-size: 8px;
-  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #000, inset -2px -2px 0 var(--os-bevel-dark);
+  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #000, inset 2px 2px 0 #fff, inset -2px -2px 0 rgb(130, 130, 130);
   cursor: none;
 }
 .os-btn:active {
@@ -915,7 +915,7 @@ body.is-fullscreen .full_screen {
   text-align: left;
   background: var(--os-bg);
   color: var(--os-ink);
-  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #000, inset -2px -2px 0 var(--os-bevel-dark);
+  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #000, inset 2px 2px 0 #fff, inset -2px -2px 0 rgb(130, 130, 130);
   cursor: none;
 }
 .project-tab.is-active {
@@ -1996,16 +1996,26 @@ body:not(.is-mobile) ::-webkit-scrollbar-thumb {
   --sb-face: var(--os-bg);
   --sb-grip: var(--os-ink);
   --sb-grip-light: #fff;
+  /* trois bandes au centre, gravées (trait sombre + reflet blanc) */
   background:
-    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% 50% / 7px 2px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 2px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + -3px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + -2px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + 0px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 1px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + 3px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 4px) / 7px 1px no-repeat,
     var(--sb-face);
-  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #000, inset -2px -2px 0 rgb(130, 130, 130);
+  /* même biseau que les cadres : gris en haut à gauche, noir en bas à droite */
+  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #000, inset 2px 2px 0 #fff, inset -2px -2px 0 rgb(130, 130, 130);
 }
 body:not(.is-mobile) ::-webkit-scrollbar-thumb:horizontal {
   background:
-    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% 50% / 2px 7px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 2px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + -3px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + -2px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + 0px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 1px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + 3px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 4px) 50% / 1px 7px no-repeat,
     var(--sb-face);
 }
 body:not(.is-mobile) ::-webkit-scrollbar-thumb:active {
@@ -2026,7 +2036,7 @@ body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb {
   --sb-face: var(--term-dim);
   --sb-grip: var(--term-bg);
   --sb-grip-light: var(--term-green);
-  box-shadow: inset 1px 1px 0 var(--term-green), inset -1px -1px 0 #0d3a1d, 0 0 4px rgba(93, 255, 143, 0.35);
+  box-shadow: inset 1px 1px 0 #1d6b3a, inset -1px -1px 0 #000, inset 2px 2px 0 var(--term-green), inset -2px -2px 0 #1d6b3a;
 }
 body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-thumb:active,
 body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active {
@@ -2034,4 +2044,35 @@ body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active
 }
 body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-corner {
   background: var(--term-bg);
+}
+
+/* ---------- Explorateur (PC) : la zone des fichiers s'arrête au-dessus du pied de fenêtre ----------
+ * En-tête 5 % + pied 5 % (posé en absolu en bas) : le milieu fait 90 %, sinon la liste et sa barre
+ * de défilement passaient sous le pied jusqu'au coin de redimensionnement.
+ */
+body:not(.is-mobile) .new-square .border-inner-contener > .content2 {
+  height: 90%;
+}
+body:not(.is-mobile) .new-square .content2 > .inner_folders,
+body:not(.is-mobile) .new-square .content2 > .list_folder {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- Curseur : dessiné par le système (même image 32 px) ----------
+ * Aucun retard sur aucun navigateur, et il suit aussi pendant qu'on tire une barre de
+ * défilement. L'élément .custom_cursor ne sert plus qu'à l'étiquette de la barre des tâches.
+ */
+html.os-cursor,
+html.os-cursor *,
+html.os-cursor *::before,
+html.os-cursor *::after {
+  cursor: url('/img/Cursor101.png') 0 0, default !important;
+}
+html.os-cursor.os-cursor-off,
+html.os-cursor.os-cursor-off * {
+  cursor: none !important;
+}
+html.os-cursor .custom_cursor {
+  background-image: none;
 }
