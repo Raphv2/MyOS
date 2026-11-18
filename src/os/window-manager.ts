@@ -91,7 +91,7 @@ export class OSWindow {
     const s = this.el.style;
     if (!this.maximized) {
       this.restoreBox = { left: s.left, top: s.top, width: s.width, height: s.height };
-      Object.assign(s, { width: '100%', height: '92.5%', top: '3.20vh', left: '0' });
+      Object.assign(s, this.manager.maximizedBox());
       this.maximized = true;
       this.el.classList.add('is-maximized');
     } else {
@@ -205,6 +205,32 @@ export class WindowManager {
     if (r.right > sr.right - sr.width * 0.01) {
       const left = Math.max(sr.width * 0.01, sr.width * 0.99 - r.width);
       el.style.left = `${(left / sr.width) * 100}%`;
+    }
+  }
+
+  /**
+   * Position d'une fenêtre agrandie : juste sous la barre du haut, jusqu'en bas de l'écran
+   * (sur mobile, jusqu'à la barre des tâches qui reste affichée). Calculée sur les vraies
+   * positions, en TV comme en plein écran.
+   */
+  maximizedBox(): { left: string; top: string; width: string; height: string } {
+    const sr = this.screen.getBoundingClientRect();
+    if (!sr.height) return { left: '0', top: '3.2vh', width: '100%', height: '92.5%' };
+    const bar = this.screen.querySelector('.rectangular-bar-top')?.getBoundingClientRect();
+    const top = bar && bar.height ? Math.max(0, bar.bottom - sr.top) : sr.height * 0.035;
+    let bottom = sr.height;
+    if (isMobile) {
+      const task = this.taskbar.getBoundingClientRect();
+      if (task.height && task.top > sr.top) bottom = Math.min(bottom, task.top - sr.top);
+    }
+    const pct = (v: number) => `${(v / sr.height) * 100}%`;
+    return { left: '0', top: pct(top), width: '100%', height: pct(bottom - top) };
+  }
+
+  /** Recale les fenêtres agrandies (plein écran activé / désactivé, fenêtre redimensionnée). */
+  refreshMaximized(): void {
+    for (const w of this.windows.values()) {
+      if (w.maximized) Object.assign(w.el.style, this.maximizedBox());
     }
   }
 

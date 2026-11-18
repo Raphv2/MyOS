@@ -1559,47 +1559,70 @@ body:not(.is-mobile) .desktop-icon a {
   z-index: 3;
 }
 
-/* ---------- Cadre des fenêtres : public/ui/window.png en 9 parties ----------
- * Image pixel-art 210×196. Fixes : coins, barre de titre à gauche (0-49), boutons (152-209),
- * haut (0-39), bas (176-195). Seules la colonne des rayures (50-151) et la bande du corps
- * (40-175) se répètent. --wp = taille d'un pixel de l'image (posée par main.ts).
+/* ---------- Cadre pixel-art des fenêtres ET des widgets ----------
+ * Dessin : src/ui/frame/window.png (210×196), découpé en 8 morceaux par `npm run frame`.
+ * Fixes : coins, titre (0-49), boutons (152-209), haut (0-39), bas (176-195).
+ * Étirées (= répétées, elles sont uniformes) : les rayures (50-151) et le corps (40-175).
+ * Dessiné en couches superposées : chaque bande passe 1 px sous les coins, donc aucune fente
+ * même quand l'écran réduit la page (mobile). --wp = taille d'un pixel du dessin (main.ts).
  */
 :root {
   --wp: 1px; /* remplacé par main.ts selon l'écran */
 }
-.new-square {
+.new-square,
+.widget {
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
-.new-square::before {
+.new-square::before,
+.widget::before {
+  --ft: calc(var(--wp) * 40);
+  --fb: calc(var(--wp) * 20);
+  --fl: calc(var(--wp) * 50);
+  --fr: calc(var(--wp) * 58);
   content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
-  box-sizing: border-box;
-  border-style: solid;
-  border-width: calc(var(--wp) * 40) calc(var(--wp) * 58) calc(var(--wp) * 20) calc(var(--wp) * 50);
-  border-image: url('/ui/window.png') 40 58 20 50 fill / calc(var(--wp) * 40) calc(var(--wp) * 58) calc(var(--wp) * 20) calc(var(--wp) * 50) repeat;
-  image-rendering: pixelated;
   pointer-events: none;
+  image-rendering: pixelated;
+  background:
+    url('../ui/frame/tl.png') left top / var(--fl) var(--ft) no-repeat,
+    url('../ui/frame/tr.png') right top / var(--fr) var(--ft) no-repeat,
+    url('../ui/frame/bl.png') left bottom / var(--fl) var(--fb) no-repeat,
+    url('../ui/frame/br.png') right bottom / var(--fr) var(--fb) no-repeat,
+    url('../ui/frame/t.png') calc(var(--fl) - 1px) top / calc(100% - var(--fl) - var(--fr) + 2px) var(--ft) no-repeat,
+    url('../ui/frame/b.png') calc(var(--fl) - 1px) bottom / calc(100% - var(--fl) - var(--fr) + 2px) var(--fb) no-repeat,
+    url('../ui/frame/l.png') left calc(var(--ft) - 1px) / var(--fl) calc(100% - var(--ft) - var(--fb) + 2px) no-repeat,
+    url('../ui/frame/r.png') right calc(var(--ft) - 1px) / var(--fr) calc(100% - var(--ft) - var(--fb) + 2px) no-repeat,
+    linear-gradient(#2b2b2b, #2b2b2b) calc(var(--fl) - 1px) calc(var(--ft) - 1px) / calc(100% - var(--fl) - var(--fr) + 2px) calc(100% - var(--ft) - var(--fb) + 2px) no-repeat;
 }
+
 /* Zone de contenu : recouvre l'intérieur sombre ET son trait noir (trop marqué autour d'un
-   contenu clair) ; il reste la marge blanche du dessin (≈ 6 px) puis le cadre gris / noir. */
-.new-square > .border-inner-contener {
+   contenu clair) ; il reste la marge blanche du dessin puis le cadre gris / noir. */
+.new-square > .border-inner-contener,
+#eye_widget > .border-inner-contener,
+#profile_widget > .border-inner-contener,
+#contact_us > .border-inner-contener {
+  position: absolute;
   top: calc(var(--wp) * 39);
   left: calc(var(--wp) * 17);
   right: calc(var(--wp) * 16);
   bottom: calc(var(--wp) * 16);
   width: auto;
   height: auto;
+  margin: 0;
+  border: 0;
   transform: none;
   box-shadow: none;
   z-index: 1;
 }
-/* Barre de titre : le dessin fait tout, on ne garde que le texte et les zones cliquables */
-.new-square > .top_tab {
+
+/* Barre de titre : le dessin fait tout, on garde le texte et les zones cliquables */
+.new-square > .top_tab,
+.widget > .top_widget {
   left: 0;
   right: 0;
   top: 0;
@@ -1612,7 +1635,8 @@ body:not(.is-mobile) .desktop-icon a {
   box-shadow: none;
   z-index: 2;
 }
-.new-square > .top_tab .application_name {
+.new-square > .top_tab .application_name,
+.widget > .top_widget .application_name {
   position: absolute;
   left: calc(var(--wp) * 8);
   top: calc(var(--wp) * 3);
@@ -1628,10 +1652,13 @@ body:not(.is-mobile) .desktop-icon a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
 }
+/* Boutons du dessin : vert = réduire, jaune = agrandir, rouge = fermer */
 .new-square > .top_tab .minus_button,
 .new-square > .top_tab .full_screen_btn,
-.new-square > .top_tab .close-btn {
+.new-square > .top_tab .close-btn,
+.widget > .top_widget .close-btn {
   display: block;
   top: calc(var(--wp) * 6);
   width: calc(var(--wp) * 13);
@@ -1647,18 +1674,21 @@ body:not(.is-mobile) .desktop-icon a {
 .new-square > .top_tab .full_screen_btn {
   right: calc(var(--wp) * 26);
 }
-.new-square > .top_tab .close-btn {
+.new-square > .top_tab .close-btn,
+.widget > .top_widget .close-btn {
   right: calc(var(--wp) * 11);
 }
 .new-square > .top_tab .minus_button:hover,
 .new-square > .top_tab .full_screen_btn:hover,
-.new-square > .top_tab .close-btn:hover {
+.new-square > .top_tab .close-btn:hover,
+.widget > .top_widget .close-btn:hover {
   background: rgba(255, 255, 255, 0.22);
   box-shadow: none;
 }
 .new-square > .top_tab .minus_button:active,
 .new-square > .top_tab .full_screen_btn:active,
-.new-square > .top_tab .close-btn:active {
+.new-square > .top_tab .close-btn:active,
+.widget > .top_widget .close-btn:active {
   background: rgba(0, 0, 0, 0.2);
 }
 .new-square .win-resize {
@@ -1667,6 +1697,7 @@ body:not(.is-mobile) .desktop-icon a {
   width: calc(var(--wp) * 8);
   height: calc(var(--wp) * 8);
 }
+
 /* Le cadre dessiné entoure déjà le contenu : plus de liseré noir sur le bord du contenu,
    on garde seulement les séparations internes (en gris). */
 .new-square .border-inner-contener > .content,

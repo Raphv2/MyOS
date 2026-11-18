@@ -159,7 +159,11 @@ export function mountDesktop(root: HTMLElement, env: DesktopEnv): () => void {
   homeIcon.addEventListener('mouseenter', () => cursor?.showLabel('Home'), { signal });
   homeIcon.addEventListener('mouseleave', () => cursor?.hideLabel(), { signal });
 
-  window.addEventListener('myos:layout', () => icons.relayout(), { signal });
+  window.addEventListener('myos:layout', () => {
+    icons.relayout();
+    wm.refreshMaximized(); // le mode plein écran est déjà appliqué quand l'événement part
+  }, { signal });
+  window.addEventListener('resize', () => wm.refreshMaximized(), { signal });
 
   const stopClock = startClock(clock);
 
