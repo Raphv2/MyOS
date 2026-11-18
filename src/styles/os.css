@@ -1655,3 +1655,50 @@ body:not(.is-mobile) .desktop-icon a {
 .new-square .border-inner-contener .viewer-footer {
   box-shadow: inset 0 -1px 0 rgb(134, 133, 133);
 }
+
+/* ---------- Widget profil : carte photo + nom + bio ----------
+ * Portée limitée à #profile_widget (le menu déroulant « Raphaël Gosset » utilise les mêmes
+ * classes et garde son style). Masqué sur mobile comme avant.
+ */
+#content_profile_widget {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr); /* bloc nom + bio centré */
+  column-gap: 1.1vw;
+  row-gap: 0.7vh;
+  align-items: start;
+  justify-content: stretch;
+  box-sizing: border-box;
+  padding: 1vh 1vw;
+  text-align: left;
+  overflow: hidden;
+}
+#content_profile_widget .profile_image_dropdown {
+  grid-row: 1 / -1;
+  align-self: center;
+  width: 7vw;
+  height: 7vw;
+  max-height: calc(100% - 4px);
+  aspect-ratio: 1;
+  margin: 0;
+}
+#content_profile_widget .raph_name {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  padding-bottom: 0.7vh;
+  font-size: 0.85vw;
+  line-height: 1.3;
+  color: var(--os-ink);
+  border-bottom: 1px solid rgb(130, 130, 130);
+  box-shadow: 0 1px 0 #fff;
+}
+#content_profile_widget .profile_bio {
+  grid-column: 2;
+  grid-row: 3;
+  margin: 0;
+  font-size: 0.48vw;
+  line-height: 1.8;
+  color: #3a3a3a;
+  overflow-wrap: break-word;
+}
