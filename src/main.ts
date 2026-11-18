@@ -9,6 +9,7 @@ import { qs } from './core/dom';
 import { Cursor } from './os/cursor';
 import { mountDesktop } from './os/desktop';
 import { mountOff, mountStart } from './os/screens';
+import { installTouchScrollbar } from './os/touch-scrollbar';
 
 type Page = 'start' | 'accueil' | 'endoflight';
 
@@ -73,4 +74,5 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('popstate', () => go(pageFromUrl(), false));
 
 applyFullscreen(fullscreen);
+installTouchScrollbar();
 go(pageFromUrl(), false);
