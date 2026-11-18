@@ -1158,11 +1158,38 @@ body.is-fullscreen .full_screen {
   .project-head {
     flex-direction: row;
   }
+  /* la page fait 980 px de large puis est réduite à l'écran : on grossit l'en-tête du projet */
+  .project-side {
+    flex-wrap: wrap; /* logo + titre sur une ligne, onglets en dessous */
+    gap: 14px 24px;
+    padding: 16px 18px;
+    overflow-x: hidden;
+  }
+  .project-head {
+    gap: 18px;
+  }
   .project-logo {
-    width: 48px;
+    width: 110px;
+    padding: 8px;
+  }
+  .project-title {
+    font-size: 22px;
+    white-space: nowrap;
   }
   .project-nav {
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .project-tab {
+    gap: 14px;
+    padding: 16px 20px;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+  .project-count {
+    padding: 4px 9px;
+    border-radius: 5px;
   }
 }
 
