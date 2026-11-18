@@ -1977,74 +1977,80 @@ body:not(.is-mobile) #raph_dropdown .profile_bio {
   }
 }
 
-/* ---------- Barre de défilement maison (PC) ----------
- * Rail gris creusé, curseur en relief comme les boutons des fenêtres, avec une barre centrée
- * dessus (horizontale sur la barre verticale, verticale sur la barre horizontale).
- * Dans les terminaux : même forme, en vert. Le mobile garde ses barres natives, et Firefox
- * (qui ne sait pas dessiner ça) garde la sienne.
+/* ---------- Barre de défilement maison (PC et mobile) ----------
+ * Rail gris creusé, curseur avec le biseau des cadres et trois bandes gravées au centre
+ * (horizontales sur la barre verticale, verticales sur la barre horizontale). Dans les terminaux :
+ * même forme, en vert. Tout est en multiples de --sb-u : 1 px sur PC, 2 px sur mobile (la page y
+ * fait 980 px de large puis est réduite à l'écran). Firefox et l'iPhone (Safari) ne savent pas
+ * dessiner ces barres : ils gardent les leurs.
  */
-body:not(.is-mobile) ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+:root {
+  --sb-u: 1px;
 }
-body:not(.is-mobile) ::-webkit-scrollbar-track {
+body.is-mobile {
+  --sb-u: 2px;
+}
+::-webkit-scrollbar {
+  width: calc(14 * var(--sb-u));
+  height: calc(14 * var(--sb-u));
+}
+::-webkit-scrollbar-track {
   background: #d6d6d6;
-  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #fff;
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #fff;
 }
-body:not(.is-mobile) ::-webkit-scrollbar-corner {
+::-webkit-scrollbar-corner {
   background: var(--os-bg);
 }
-body:not(.is-mobile) ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   --sb-face: var(--os-bg);
   --sb-grip: var(--os-ink);
   --sb-grip-light: #fff;
-  /* trois bandes au centre, gravées (trait sombre + reflet blanc) */
   background:
-    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + -3px) / 7px 1px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + -2px) / 7px 1px no-repeat,
-    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + 0px) / 7px 1px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 1px) / 7px 1px no-repeat,
-    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + 3px) / 7px 1px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 4px) / 7px 1px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + calc(-3 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + calc(-2 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + calc(0 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + calc(1 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% calc(50% + calc(3 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + calc(4 * var(--sb-u))) / calc(7 * var(--sb-u)) var(--sb-u) no-repeat,
     var(--sb-face);
   /* même biseau que les cadres : gris en haut à gauche, noir en bas à droite */
-  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #000, inset 2px 2px 0 #fff, inset -2px -2px 0 rgb(130, 130, 130);
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #000, inset calc(2 * var(--sb-u)) calc(2 * var(--sb-u)) 0 #fff, inset calc(-2 * var(--sb-u)) calc(-2 * var(--sb-u)) 0 rgb(130, 130, 130);
 }
-body:not(.is-mobile) ::-webkit-scrollbar-thumb:horizontal {
+::-webkit-scrollbar-thumb:horizontal {
   background:
-    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + -3px) 50% / 1px 7px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + -2px) 50% / 1px 7px no-repeat,
-    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + 0px) 50% / 1px 7px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 1px) 50% / 1px 7px no-repeat,
-    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + 3px) 50% / 1px 7px no-repeat,
-    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 4px) 50% / 1px 7px no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + calc(-3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + calc(-2 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + calc(0 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + calc(1 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--sb-grip), var(--sb-grip)) calc(50% + calc(3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + calc(4 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
     var(--sb-face);
 }
-body:not(.is-mobile) ::-webkit-scrollbar-thumb:active {
+::-webkit-scrollbar-thumb:active {
   --sb-face: #dcdcdc;
 }
 
-/* Terminaux : rail noir, curseur vert, barre sombre au centre */
-body:not(.is-mobile) .profile_terminal::-webkit-scrollbar {
-  width: 10px;
+/* Terminaux : rail noir, curseur vert, bandes sombres au centre */
+.profile_terminal::-webkit-scrollbar {
+  width: calc(10 * var(--sb-u));
 }
-body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-track,
-body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-track {
+.profile_terminal::-webkit-scrollbar-track,
+.doc-terminal > .doc-scroll::-webkit-scrollbar-track {
   background: var(--term-bg);
-  box-shadow: inset 1px 0 0 rgba(93, 255, 143, 0.3);
+  box-shadow: inset var(--sb-u) 0 0 rgba(93, 255, 143, 0.3);
 }
-body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-thumb,
-body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb {
+.profile_terminal::-webkit-scrollbar-thumb,
+.doc-terminal > .doc-scroll::-webkit-scrollbar-thumb {
   --sb-face: var(--term-dim);
   --sb-grip: var(--term-bg);
   --sb-grip-light: var(--term-green);
-  box-shadow: inset 1px 1px 0 #1d6b3a, inset -1px -1px 0 #000, inset 2px 2px 0 var(--term-green), inset -2px -2px 0 #1d6b3a;
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 #1d6b3a, inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #000, inset calc(2 * var(--sb-u)) calc(2 * var(--sb-u)) 0 var(--term-green), inset calc(-2 * var(--sb-u)) calc(-2 * var(--sb-u)) 0 #1d6b3a;
 }
-body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-thumb:active,
-body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active {
+.profile_terminal::-webkit-scrollbar-thumb:active,
+.doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active {
   --sb-face: var(--term-green);
 }
-body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-corner {
+.doc-terminal > .doc-scroll::-webkit-scrollbar-corner {
   background: var(--term-bg);
 }
 
