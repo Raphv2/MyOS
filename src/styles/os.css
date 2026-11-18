@@ -20,12 +20,25 @@
   --term-glow: 0 0 4px rgba(93, 255, 143, 0.45);
 }
 
-/* ---------- Curseur : suit la souris via transform (plus fluide) ---------- */
+/* ---------- Curseur : suit la souris via transform (plus fluide) ----------
+ * Le curseur pixel est coupé au bord de l'écran (voir cursor.ts). Hors de l'écran, sur les
+ * boutons de la TV, on montre le curseur normal du système (l'ancien CSS le cachait).
+ */
 .custom_cursor {
   position: fixed;
   left: 0;
   top: 0;
   will-change: transform;
+}
+.power_button,
+.source_button,
+.fullscreen_postIt,
+.download_button {
+  cursor: pointer;
+}
+.screen .download_button,
+.screen_start .download_button {
+  cursor: none;
 }
 
 /* ---------- Mode plein écran (sans cadre TV), appliqué sans recharger ---------- */

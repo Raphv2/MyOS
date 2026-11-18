@@ -37,9 +37,30 @@ export class Cursor {
       this.raf = requestAnimationFrame(() => {
         this.raf = 0;
         this.el.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this.clipToScreen();
       });
     }
   };
+
+  /**
+   * Le curseur pixel vit dans l'écran de la TV : il est coupé net au bord de l'écran, comme
+   * derrière la vitre. Dehors (cadre, boutons), c'est le curseur normal du système.
+   * Les marges peuvent être négatives pour laisser dépasser l'étiquette au-dessus du curseur.
+   */
+  private clipToScreen(): void {
+    const screen = document.querySelector('.screen, .screen_start');
+    if (!screen) {
+      this.el.style.clipPath = '';
+      return;
+    }
+    const r = screen.getBoundingClientRect();
+    const size = this.el.offsetWidth || 32;
+    const top = r.top - this.y;
+    const left = r.left - this.x;
+    const right = this.x + size - r.right;
+    const bottom = this.y + size - r.bottom;
+    this.el.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+  }
 
   setVisible(visible: boolean): void {
     this.el.style.display = visible ? '' : 'none';
