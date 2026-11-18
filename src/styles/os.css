@@ -1693,20 +1693,38 @@ body:not(.is-mobile) .desktop-icon a {
   border-bottom: 1px solid rgb(130, 130, 130);
   box-shadow: 0 1px 0 #fff;
 }
-/* Terminal de la bio : prompt « > », écriture lettre par lettre, curseur qui clignote */
+/* Tout le contenu du widget est un terminal : fond noir, écriture verte phosphore */
+#profile_widget > .border-inner-contener,
+#content_profile_widget {
+  --term-bg: #0a0f0b;
+  --term-green: #5dff8f;
+  --term-dim: #2fae5a;
+  background: var(--term-bg);
+}
+#content_profile_widget {
+  color: var(--term-green);
+  text-shadow: 0 0 4px rgba(93, 255, 143, 0.45);
+}
+#content_profile_widget .raph_name {
+  color: var(--term-green);
+  border-bottom: 1px dashed rgba(93, 255, 143, 0.5);
+  box-shadow: none;
+}
+#content_profile_widget .profile_image_dropdown {
+  border: 3px solid var(--term-bg);
+  box-shadow: 0 0 0 1px var(--term-green), 0 0 8px rgba(93, 255, 143, 0.35);
+}
+/* Bio : prompt « > », écriture lettre par lettre, curseur qui clignote */
 #content_profile_widget .profile_terminal {
   grid-column: 2;
   grid-row: 3;
   position: relative;
   margin: 0;
-  padding: 0.55vw 0.7vw;
-  background: #041127;
-  color: #efefef;
+  padding: 0;
   font-size: 0.45vw;
   line-height: 1.8;
   text-align: left;
   overflow-wrap: break-word;
-  box-shadow: inset 2px 2px 0 #000, inset -2px -2px 0 rgb(130, 130, 130);
   user-select: text;
 }
 .profile_terminal .term-ghost {
@@ -1714,10 +1732,10 @@ body:not(.is-mobile) .desktop-icon a {
 }
 .profile_terminal .term-live {
   position: absolute;
-  inset: 0.55vw 0.7vw;
+  inset: 0;
 }
 .profile_terminal .term-prompt {
-  color: #7db086;
+  color: var(--term-dim);
 }
 .profile_terminal .term-cursor {
   display: inline-block;
@@ -1725,7 +1743,8 @@ body:not(.is-mobile) .desktop-icon a {
   height: 1.05em;
   margin-left: 0.15em;
   vertical-align: -0.15em;
-  background: #efefef;
+  background: var(--term-green);
+  box-shadow: 0 0 4px rgba(93, 255, 143, 0.6);
   animation: myos-blink 1s steps(1, end) infinite;
 }
 @keyframes myos-blink {
