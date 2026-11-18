@@ -13,6 +13,11 @@
   --os-red: #c5292b;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
   --pixel: 'Press Start 2P', monospace;
+  /* terminaux (widget profil, présentation des projets, chargements .exe) */
+  --term-bg: #0a0f0b;
+  --term-green: #5dff8f;
+  --term-dim: #2fae5a;
+  --term-glow: 0 0 4px rgba(93, 255, 143, 0.45);
 }
 
 /* ---------- Curseur : suit la souris via transform (plus fluide) ---------- */
@@ -1656,22 +1661,50 @@ body:not(.is-mobile) .desktop-icon a {
   box-shadow: inset 0 -1px 0 rgb(134, 133, 133);
 }
 
-/* ---------- Widget profil : carte photo + nom + bio ----------
- * Portée limitée à #profile_widget (le menu déroulant « Raphaël Gosset » utilise les mêmes
- * classes et garde son style). Masqué sur mobile comme avant.
+/* ---------- Photo de profil ----------
+ * L'originale (/img/profile.png) est un pixel-art tramé de ~277 points agrandi à 4724 px (4,7 Mo).
+ * Réduite à ~100 px, la trame tombe sous le pixel écran et fait du moiré : on sert une version
+ * lissée de 256 px (84 Ko), propre à toutes les tailles.
  */
+.profile_image_contener,
+.profile_image_dropdown {
+  background-image: url('/ui/profile.png');
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Widget profil : un terminal vert phosphore ----------
+ * Portée limitée à #profile_widget (le menu déroulant « Raphaël Gosset » a son propre style).
+ * Masqué sur mobile comme avant.
+ */
+#profile_widget > .border-inner-contener,
+#content_profile_widget {
+  background: var(--term-bg);
+}
 #content_profile_widget {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr); /* bloc nom + bio centré */
+  grid-template-rows: auto minmax(0, 1fr); /* nom, puis le terminal qui prend le reste */
   column-gap: 1.1vw;
-  row-gap: 0.7vh;
+  row-gap: 0.6vh;
   align-items: start;
   justify-content: stretch;
   box-sizing: border-box;
   padding: 1vh 1vw;
   text-align: left;
   overflow: hidden;
+  color: var(--term-green);
+  text-shadow: var(--term-glow);
 }
 #content_profile_widget .profile_image_dropdown {
   grid-row: 1 / -1;
@@ -1681,63 +1714,62 @@ body:not(.is-mobile) .desktop-icon a {
   max-height: calc(100% - 4px);
   aspect-ratio: 1;
   margin: 0;
-}
-#content_profile_widget .raph_name {
-  grid-column: 2;
-  grid-row: 2;
-  margin: 0;
-  padding-bottom: 0.7vh;
-  font-size: 0.85vw;
-  line-height: 1.3;
-  color: var(--os-ink);
-  border-bottom: 1px solid rgb(130, 130, 130);
-  box-shadow: 0 1px 0 #fff;
-}
-/* Tout le contenu du widget est un terminal : fond noir, écriture verte phosphore */
-#profile_widget > .border-inner-contener,
-#content_profile_widget {
-  --term-bg: #0a0f0b;
-  --term-green: #5dff8f;
-  --term-dim: #2fae5a;
-  background: var(--term-bg);
-}
-#content_profile_widget {
-  color: var(--term-green);
-  text-shadow: 0 0 4px rgba(93, 255, 143, 0.45);
-}
-#content_profile_widget .raph_name {
-  color: var(--term-green);
-  border-bottom: 1px dashed rgba(93, 255, 143, 0.5);
-  box-shadow: none;
-}
-#content_profile_widget .profile_image_dropdown {
   border: 3px solid var(--term-bg);
   box-shadow: 0 0 0 1px var(--term-green), 0 0 8px rgba(93, 255, 143, 0.35);
 }
-/* Bio : prompt « > », écriture lettre par lettre, curseur qui clignote */
+#content_profile_widget .raph_name {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-size: 0.55vw;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--term-green);
+}
 #content_profile_widget .profile_terminal {
   grid-column: 2;
-  grid-row: 3;
-  position: relative;
+  grid-row: 2;
+  align-self: stretch;
+  min-height: 0;
   margin: 0;
-  padding: 0;
+  padding: 0 0.3vw 0 0;
   font-size: 0.45vw;
   line-height: 1.8;
   text-align: left;
-  overflow-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
   user-select: text;
+  cursor: none;
 }
-.profile_terminal .term-ghost {
-  visibility: hidden; /* réserve la place du texte complet : rien ne saute pendant l'écriture */
-}
-.profile_terminal .term-live {
-  position: absolute;
-  inset: 0;
-}
-.profile_terminal .term-prompt {
+.term-prompt {
   color: var(--term-dim);
 }
-.profile_terminal .term-cursor {
+.profile_terminal .term-reply {
+  color: var(--term-dim);
+  white-space: pre-wrap;
+}
+.profile_terminal .term-typed {
+  white-space: pre-wrap;
+}
+/* Ligne de saisie : le vrai <input> est invisible par-dessus, on affiche le texte + le curseur bloc */
+.profile_terminal .term-input-line {
+  position: relative;
+}
+.profile_terminal .term-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  font: inherit;
+  cursor: none;
+}
+.term-cursor {
   display: inline-block;
   width: 0.6em;
   height: 1.05em;
@@ -1753,7 +1785,253 @@ body:not(.is-mobile) .desktop-icon a {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .profile_terminal .term-cursor {
+  .term-cursor {
     animation: none;
   }
+}
+
+/* ---------- Menu « Raphaël Gosset » (barre du haut) ----------
+ * Même mise en page que le widget (photo à gauche, nom, filet, bio) mais dans le style clair
+ * d'origine. PC seulement : le mobile garde son rendu d'avant.
+ */
+body:not(.is-mobile) #raph_dropdown.show {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  column-gap: 1.1vw;
+  row-gap: 0.8vh;
+  box-sizing: border-box;
+  width: 29vw;
+  height: auto;
+  padding: 1.6vh 1.2vw;
+}
+body:not(.is-mobile) #raph_dropdown .profile_image_dropdown {
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 5.5vw;
+  height: 5.5vw;
+  margin: 0;
+}
+body:not(.is-mobile) #raph_dropdown .raph_name {
+  grid-column: 2;
+  align-self: end;
+  margin: 0;
+  padding-bottom: 0.7vh;
+  line-height: 1.3;
+  border-bottom: 1px solid rgb(130, 130, 130);
+  box-shadow: 0 1px 0 #fff;
+}
+body:not(.is-mobile) #raph_dropdown .profile_bio {
+  grid-column: 2;
+  align-self: start;
+  line-height: 1.7;
+}
+
+/* ---------- Projet : la présentation (.md) dans un cadre terminal ---------- */
+.project-main:has(> .doc-terminal) {
+  background: var(--os-bg);
+  box-shadow: none;
+}
+.project-main > .doc-terminal {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  margin: 4px;
+  box-sizing: border-box;
+  border: 5px solid #efefef;
+  box-shadow: 1px 1px 0 #000, -1px -1px 0 rgb(130, 130, 130), inset 2px 2px 0 #000, inset -2px -2px 0 rgb(130, 130, 130);
+  background: var(--term-bg);
+}
+.doc-terminal > .doc-scroll {
+  background: transparent;
+}
+.doc-view.doc-term {
+  color: var(--term-green);
+  text-shadow: var(--term-glow);
+}
+.doc-term ::selection {
+  background: var(--term-green);
+  color: var(--term-bg);
+}
+.doc-term h1,
+.doc-term h2,
+.doc-term h3 {
+  color: var(--term-green);
+}
+.doc-term h1::before {
+  content: '> ';
+  color: var(--term-dim);
+}
+.doc-term h2::before {
+  content: '# ';
+  color: var(--term-dim);
+}
+.doc-term h3::before {
+  content: '## ';
+  color: var(--term-dim);
+}
+.doc-term strong {
+  color: #b9ffd0;
+}
+.doc-term li::marker {
+  color: var(--term-dim);
+}
+/* Liens : un bloc vert plein, inversé au survol */
+.doc-term a {
+  padding: 0.1em 0.5em;
+  background: var(--term-green);
+  color: var(--term-bg);
+  text-decoration: none;
+  text-shadow: none;
+  box-shadow: 0 0 6px rgba(93, 255, 143, 0.35);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.doc-term a:hover,
+.doc-term a:focus-visible {
+  background: transparent;
+  color: var(--term-green);
+  outline: 1px solid var(--term-green);
+  outline-offset: 0;
+}
+.doc-term code {
+  background: rgba(93, 255, 143, 0.08);
+  border: 1px solid rgba(93, 255, 143, 0.25);
+}
+.doc-term pre {
+  background: #050806;
+  color: var(--term-green);
+  border: 1px solid var(--term-dim);
+}
+.doc-term pre code {
+  border: 0;
+  background: none;
+}
+.doc-term blockquote {
+  border-left-color: var(--term-dim);
+  color: var(--term-dim);
+}
+.doc-term th,
+.doc-term td {
+  border-color: rgba(93, 255, 143, 0.3);
+}
+.doc-term hr {
+  border-top: 1px solid rgba(93, 255, 143, 0.3);
+}
+.doc-term img {
+  border: 1px solid var(--term-dim);
+  box-shadow: 0 0 8px rgba(93, 255, 143, 0.25);
+}
+.doc-term .ide-hint {
+  color: var(--term-dim);
+}
+/* curseur qui clignote en fin de document */
+.doc-term::after {
+  content: '';
+  display: inline-block;
+  width: 0.6em;
+  height: 1.05em;
+  margin-top: 0.6em;
+  background: var(--term-green);
+  box-shadow: 0 0 4px rgba(93, 255, 143, 0.6);
+  animation: myos-blink 1s steps(1, end) infinite;
+}
+
+/* ---------- Chargement des .exe (GitHub, LinkedIn, Spirale) : même terminal vert ----------
+ * Le dessin ASCII reste un bloc aligné à gauche (sinon chaque ligne est centrée à part et il se
+ * déforme), centré dans la fenêtre avec la ligne de progression. Tailles relatives à la fenêtre.
+ */
+.link-loader {
+  container-type: size;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: min(5cqh, 3cqw);
+  overflow: hidden;
+  background: var(--term-bg);
+  color: var(--term-green);
+  text-shadow: var(--term-glow);
+  user-select: none;
+}
+.link-art {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: min(2.6cqw, 4.4cqh);
+  line-height: 1;
+  white-space: pre;
+  text-align: left;
+}
+.link-status {
+  font-family: var(--pixel);
+  font-size: min(1.55cqw, 3.4cqh);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-term::after {
+    animation: none;
+  }
+}
+
+/* ---------- Barre de défilement maison (PC) ----------
+ * Rail gris creusé, curseur en relief comme les boutons des fenêtres, avec une barre centrée
+ * dessus (horizontale sur la barre verticale, verticale sur la barre horizontale).
+ * Dans les terminaux : même forme, en vert. Le mobile garde ses barres natives, et Firefox
+ * (qui ne sait pas dessiner ça) garde la sienne.
+ */
+body:not(.is-mobile) ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+body:not(.is-mobile) ::-webkit-scrollbar-track {
+  background: #d6d6d6;
+  box-shadow: inset 1px 1px 0 rgb(130, 130, 130), inset -1px -1px 0 #fff;
+}
+body:not(.is-mobile) ::-webkit-scrollbar-corner {
+  background: var(--os-bg);
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb {
+  --sb-face: var(--os-bg);
+  --sb-grip: var(--os-ink);
+  --sb-grip-light: #fff;
+  background:
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% 50% / 7px 2px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) 50% calc(50% + 2px) / 7px 1px no-repeat,
+    var(--sb-face);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #000, inset -2px -2px 0 rgb(130, 130, 130);
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb:horizontal {
+  background:
+    linear-gradient(var(--sb-grip), var(--sb-grip)) 50% 50% / 2px 7px no-repeat,
+    linear-gradient(var(--sb-grip-light), var(--sb-grip-light)) calc(50% + 2px) 50% / 1px 7px no-repeat,
+    var(--sb-face);
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb:active {
+  --sb-face: #dcdcdc;
+}
+
+/* Terminaux : rail noir, curseur vert, barre sombre au centre */
+body:not(.is-mobile) .profile_terminal::-webkit-scrollbar {
+  width: 10px;
+}
+body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-track,
+body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-track {
+  background: var(--term-bg);
+  box-shadow: inset 1px 0 0 rgba(93, 255, 143, 0.3);
+}
+body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-thumb,
+body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb {
+  --sb-face: var(--term-dim);
+  --sb-grip: var(--term-bg);
+  --sb-grip-light: var(--term-green);
+  box-shadow: inset 1px 1px 0 var(--term-green), inset -1px -1px 0 #0d3a1d, 0 0 4px rgba(93, 255, 143, 0.35);
+}
+body:not(.is-mobile) .profile_terminal::-webkit-scrollbar-thumb:active,
+body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active {
+  --sb-face: var(--term-green);
+}
+body:not(.is-mobile) .doc-terminal > .doc-scroll::-webkit-scrollbar-corner {
+  background: var(--term-bg);
 }

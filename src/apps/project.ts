@@ -100,8 +100,8 @@ export function openProject(os: Os, folder: FsFolder): void {
 
     switch (current) {
       case 'overview': {
-        const doc = h('article', { class: 'doc-view' });
-        main.replaceChildren(h('div', { class: 'doc-scroll' }, doc));
+        const doc = h('article', { class: 'doc-view doc-term' });
+        main.replaceChildren(h('div', { class: 'doc-terminal' }, h('div', { class: 'doc-scroll' }, doc)));
         if (p.readme) void markdownInto(doc, p.readme, os.fs);
         else
           doc.replaceChildren(

@@ -72,8 +72,17 @@ export function openLink(os: Os, file: FsFile): void {
 export function runLink(os: Os, key: string, title: string, icon: string, url: string, ascii: keyof typeof ASCII): void {
   const { win, created } = os.wm.open({ key, title, icon });
   if (!created) return;
-  const area = h('textarea', { class: 'loading_url', attrs: { readonly: true, 'aria-label': `Ouverture de ${url}` } });
-  win.body.append(h('div', { class: 'content' }, area));
+  // Écran de chargement façon terminal : le dessin ASCII garde sa forme (bloc centré, lignes
+  // alignées à gauche) et la ligne de progression a une largeur fixe pour ne pas trembler.
+  const status = document.createTextNode('');
+  win.body.append(
+    h(
+      'div',
+      { class: 'content link-loader', attrs: { role: 'status', 'aria-label': `Ouverture de ${url}` } },
+      h('pre', { class: 'link-art', text: ASCII[ascii], attrs: { 'aria-hidden': 'true' } }),
+      h('div', { class: 'link-status', attrs: { 'aria-hidden': 'true' } }, h('span', { class: 'term-prompt', text: '> ' }), status, h('span', { class: 'term-cursor' })),
+    ),
+  );
 
   const duration = 1500;
   const step = 15;
@@ -87,10 +96,10 @@ export function runLink(os: Os, key: string, title: string, icon: string, url: s
       win.close();
       return;
     }
-    const dots = ['.', '..', '...'][progress % 3];
+    const dots = ['.  ', '.. ', '...'][progress % 3];
     const fill = Math.floor((progress / total) * bar);
     const pct = Math.floor((progress / total) * 100);
-    area.value = `${ASCII[ascii]}\n\nRedirection${dots}  [${'#'.repeat(fill)}${' '.repeat(bar - fill)}] ${pct}%\n`;
+    status.data = `Redirection${dots}  [${'#'.repeat(fill)}${' '.repeat(bar - fill)}] ${String(pct).padStart(3)}%`;
     progress++;
   }, step);
   win.onDispose(() => window.clearInterval(timer));

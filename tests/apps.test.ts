@@ -29,7 +29,9 @@ describe('languageOf', () => {
 describe('formatClock (barre du haut)', () => {
   it('reprend le format de l’ancien site', () => {
     const d = new Date(2026, 10, 10, 11, 23);
-    expect(formatClock(d, false)).toBe('10 nove 2026 11:23');
+    expect(formatClock(d, false)).toBe('10 nov 2026 11:23');
+    expect(formatClock(new Date(2026, 5, 3, 9, 5), false)).toBe('03 jun 2026 09:05');
+    expect(formatClock(new Date(2026, 6, 3, 9, 5), false)).toBe('03 jul 2026 09:05');
     expect(formatClock(d, true)).toBe('11:23');
   });
 });

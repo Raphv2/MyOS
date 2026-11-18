@@ -109,62 +109,118 @@ export function profileWidget(signal: AbortSignal): HTMLDivElement {
     'div',
     { class: 'content', id: 'content_profile_widget' },
     h('div', { class: 'profile_image_dropdown' }),
-    h('p', { class: 'raph_name', text: OWNER.name }),
+    h('p', { class: 'raph_name' }, h('span', { class: 'sr-only', text: OWNER.name }), h('span', { text: terminalTag(OWNER.name), attrs: { 'aria-hidden': 'true' } })),
     terminal(OWNER.bio, signal),
   );
   return widget('profile_widget', 'profile_widget', 'profile_border_inner_contener', content);
 }
 
+/** « Raphaël Gosset » → « ====RAPHAEL GOSSET==== » (sans accents, en majuscules) */
+function terminalTag(name: string): string {
+  const id = name.normalize('NFD').replace(/\p{M}/gu, '').toUpperCase();
+  return `====${id}====`;
+}
+
 /**
- * Petit terminal : chaque ligne commence par « > » et s'écrit lettre par lettre,
- * puis un curseur bloc clignote. Une copie invisible du texte complet réserve la place
- * (pas de saut de mise en page) et sert aux lecteurs d'écran.
+ * Petit terminal pour de faux : la bio s'écrit lettre par lettre derrière un « > », puis on
+ * peut taper une commande (help, clear, exit). `exit` ferme le widget comme la croix.
  */
 function terminal(lines: string[], signal: AbortSignal): HTMLDivElement {
-  const line = (text: string) => h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }), text);
-  const ghost = h('div', { class: 'term-ghost' }, ...lines.map(line), h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' })));
-  const live = h('div', { class: 'term-live', attrs: { 'aria-hidden': 'true' } });
+  const row = (text: string) => h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }), text);
+  const out = h('div', { class: 'term-out', attrs: { 'aria-live': 'polite' } });
+  const typed = h('span', { class: 'term-typed' });
   const cursor = h('span', { class: 'term-cursor' });
-  const el = h('div', { class: 'profile_terminal', attrs: { role: 'note', 'aria-label': lines.join(' ') } }, ghost, live);
-
-  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const rows = lines.map(() => {
-    const text = document.createTextNode('');
-    live.appendChild(h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }), text));
-    return text;
+  const input = h('input', {
+    class: 'term-input',
+    attrs: { type: 'text', maxlength: '60', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Commande' },
   });
-  const lastRow = h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }));
+  const inputRow = h('div', { class: 'term-line term-input-line' }, h('span', { class: 'term-prompt', text: '> ' }), typed, cursor, input);
+  const el = h('div', { class: 'profile_terminal' }, h('p', { class: 'sr-only', text: lines.join(' ') }), out);
 
-  if (reduce) {
-    rows.forEach((t, i) => (t.data = lines[i] ?? ''));
-    live.appendChild(lastRow);
-    lastRow.appendChild(cursor);
-    return el;
-  }
+  // --- Écriture de la bio (~28 ms par lettre, pause entre les lignes, après le fondu du widget)
+  const bio = h('div', { attrs: { 'aria-hidden': 'true' } });
+  out.appendChild(bio);
+  // Les lignes n'apparaissent (avec leur « > ») qu'au moment où elles commencent à s'écrire.
+  const nodes = lines.map(() => {
+    const t = document.createTextNode('');
+    row('').appendChild(t);
+    return t;
+  });
+  let r = 0;
+  let c = 0;
+  let timer = 0;
+  const ready = () => {
+    window.clearTimeout(timer);
+    nodes.forEach((t, i) => {
+      t.data = lines[i] ?? '';
+      if (!t.parentElement!.isConnected) bio.appendChild(t.parentElement!);
+    });
+    if (!inputRow.isConnected) el.appendChild(inputRow);
+    inputRow.insertBefore(cursor, input);
+  };
+  const tick = () => {
+    const text = lines[r];
+    if (text === undefined) return ready();
+    const line = nodes[r]!.parentElement!;
+    if (!line.isConnected) bio.appendChild(line);
+    if (cursor.parentElement !== line) line.appendChild(cursor);
+    nodes[r]!.data = text.slice(0, ++c);
+    if (c >= text.length) {
+      r++;
+      c = 0;
+    }
+    timer = window.setTimeout(tick, c === 0 ? 380 : 28);
+  };
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) ready();
+  else timer = window.setTimeout(tick, 1200);
+  signal.addEventListener('abort', () => window.clearTimeout(timer));
 
-  // Écriture : ~28 ms par lettre, courte pause entre les lignes, après le fondu du widget.
-  let row = 0;
-  let col = 0;
-  let timer = window.setTimeout(function tick() {
-    const text = lines[row];
-    if (text === undefined) {
-      live.appendChild(lastRow);
-      lastRow.appendChild(cursor);
+  // --- Commandes
+  const print = (...texts: string[]) => texts.forEach((t) => out.appendChild(h('div', { class: 'term-line term-reply', text: t })));
+  const run = (cmd: string) => {
+    out.appendChild(row(cmd));
+    const name = cmd.trim().toLowerCase();
+    if (name === 'exit') {
+      el.closest('.widget')?.querySelector<HTMLElement>('.close-btn')?.click();
       return;
     }
-    const node = rows[row]!;
-    if (node.parentElement && cursor.parentElement !== node.parentElement) node.parentElement.appendChild(cursor);
-    col++;
-    node.data = text.slice(0, col);
-    let wait = 28;
-    if (col >= text.length) {
-      row++;
-      col = 0;
-      wait = 380;
-    }
-    timer = window.setTimeout(tick, wait);
-  }, 1200);
-  signal.addEventListener('abort', () => window.clearTimeout(timer));
+    if (name === 'clear') out.replaceChildren();
+    else if (name === 'help') print('help   liste des commandes', "clear  efface l'écran", 'exit   ferme la fenêtre');
+    else if (name) print(`${name.split(/\s/)[0]}: commande introuvable (tape help)`);
+  };
+  const sync = () => {
+    input.setSelectionRange(input.value.length, input.value.length); // le curseur reste en bout de ligne
+    typed.textContent = input.value;
+  };
+  input.addEventListener('input', sync, { signal });
+  input.addEventListener(
+    'keydown',
+    (e) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation(); // ne pas quitter le plein écran
+        input.blur();
+      } else if (e.key === 'Enter') {
+        run(input.value);
+        input.value = '';
+        sync();
+      } else window.setTimeout(sync);
+      el.scrollTop = el.scrollHeight;
+    },
+    { signal },
+  );
+  input.addEventListener('focus', () => el.classList.add('is-focused'), { signal });
+  input.addEventListener('blur', () => el.classList.remove('is-focused'), { signal });
+  // Un clic dans le terminal termine l'écriture et donne la main au clavier.
+  el.addEventListener(
+    'click',
+    () => {
+      if (window.getSelection()?.toString()) return; // laisse copier du texte
+      ready();
+      input.focus({ preventScroll: true });
+      el.scrollTop = el.scrollHeight;
+    },
+    { signal },
+  );
   return el;
 }
 

@@ -1,11 +1,14 @@
 import { isMobile } from '../core/device';
 
-/** Date façon barre de l'OS : `10 nove 2026 11:23` (ou juste l'heure sur mobile). */
+/** Mois sur 3 lettres (juin / juillet : « jun » / « jul » pour ne pas les confondre). */
+const MONTHS = ['jan', 'fév', 'mar', 'avr', 'mai', 'jun', 'jul', 'aoû', 'sep', 'oct', 'nov', 'déc'];
+
+/** Date façon barre de l'OS : `10 nov 2026 11:23` (ou juste l'heure sur mobile). */
 export function formatClock(now: Date, mobile = isMobile): string {
   const time = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   if (mobile) return time;
-  const parts = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }).split(' ');
-  return `${parts[0] ?? ''} ${(parts[1] ?? '').substring(0, 4)} ${parts[2] ?? ''} ${time}`;
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${day} ${MONTHS[now.getMonth()]} ${now.getFullYear()} ${time}`;
 }
 
 /** Met à jour l'horloge chaque seconde. Retourne la fonction d'arrêt. */
