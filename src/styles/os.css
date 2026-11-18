@@ -1628,6 +1628,7 @@ body:not(.is-mobile) .desktop-icon a {
 /* ---------- Contenu encadré comme la photo de profil (.profile_image_contener) ---------- */
 .new-square > .border-inner-contener,
 #profile_widget > .border-inner-contener,
+#eye_widget > .border-inner-contener,
 #contact_us > .border-inner-contener {
   box-sizing: border-box;
   border: 5px solid #efefef;
@@ -1640,6 +1641,7 @@ body:not(.is-mobile) .desktop-icon a {
 @media (pointer: coarse) and (orientation: portrait) {
   .new-square > .border-inner-contener,
   #profile_widget > .border-inner-contener,
+  #eye_widget > .border-inner-contener,
   #contact_us > .border-inner-contener {
     border-width: 10px; /* comme la photo de profil sur mobile */
   }
