@@ -104,15 +104,68 @@ export function eyeWidget(signal: AbortSignal): HTMLDivElement {
   return el;
 }
 
-export function profileWidget(): HTMLDivElement {
+export function profileWidget(signal: AbortSignal): HTMLDivElement {
   const content = h(
     'div',
     { class: 'content', id: 'content_profile_widget' },
     h('div', { class: 'profile_image_dropdown' }),
     h('p', { class: 'raph_name', text: OWNER.name }),
-    bioParagraph(),
+    terminal(OWNER.bio, signal),
   );
   return widget('profile_widget', 'profile_widget', 'profile_border_inner_contener', content);
+}
+
+/**
+ * Petit terminal : chaque ligne commence par « > » et s'écrit lettre par lettre,
+ * puis un curseur bloc clignote. Une copie invisible du texte complet réserve la place
+ * (pas de saut de mise en page) et sert aux lecteurs d'écran.
+ */
+function terminal(lines: string[], signal: AbortSignal): HTMLDivElement {
+  const line = (text: string) => h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }), text);
+  const ghost = h('div', { class: 'term-ghost' }, ...lines.map(line), h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' })));
+  const live = h('div', { class: 'term-live', attrs: { 'aria-hidden': 'true' } });
+  const cursor = h('span', { class: 'term-cursor' });
+  const el = h('div', { class: 'profile_terminal', attrs: { role: 'note', 'aria-label': lines.join(' ') } }, ghost, live);
+
+  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const rows = lines.map(() => {
+    const text = document.createTextNode('');
+    live.appendChild(h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }), text));
+    return text;
+  });
+  const lastRow = h('div', { class: 'term-line' }, h('span', { class: 'term-prompt', text: '> ' }));
+
+  if (reduce) {
+    rows.forEach((t, i) => (t.data = lines[i] ?? ''));
+    live.appendChild(lastRow);
+    lastRow.appendChild(cursor);
+    return el;
+  }
+
+  // Écriture : ~28 ms par lettre, courte pause entre les lignes, après le fondu du widget.
+  let row = 0;
+  let col = 0;
+  let timer = window.setTimeout(function tick() {
+    const text = lines[row];
+    if (text === undefined) {
+      live.appendChild(lastRow);
+      lastRow.appendChild(cursor);
+      return;
+    }
+    const node = rows[row]!;
+    if (node.parentElement && cursor.parentElement !== node.parentElement) node.parentElement.appendChild(cursor);
+    col++;
+    node.data = text.slice(0, col);
+    let wait = 28;
+    if (col >= text.length) {
+      row++;
+      col = 0;
+      wait = 380;
+    }
+    timer = window.setTimeout(tick, wait);
+  }, 1200);
+  signal.addEventListener('abort', () => window.clearTimeout(timer));
+  return el;
 }
 
 /** Widget contact : la spirale ouvre un mail (Spirale.exe). */

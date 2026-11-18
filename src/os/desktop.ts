@@ -109,7 +109,7 @@ export function mountDesktop(root: HTMLElement, env: DesktopEnv): () => void {
   screen.append(
     fullscreenTab(env.exitFullscreen, signal),
     eyeWidget(signal),
-    profileWidget(),
+    profileWidget(signal),
     contactWidget(contact, signal),
     taskbar,
     topBar,
