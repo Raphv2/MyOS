@@ -1561,8 +1561,8 @@ body:not(.is-mobile) .desktop-icon a {
 
 /* ---------- Cadre des fenêtres : public/ui/window.png en 9 parties ----------
  * Image pixel-art 210×196. Fixes : coins, barre de titre à gauche (0-49), boutons (152-209),
- * haut (0-33), bas (183-195). Seules la colonne des rayures (50-151) et la bande du corps
- * (34-182) se répètent. --wp = taille d'un pixel de l'image (posée par main.ts).
+ * haut (0-39), bas (176-195). Seules la colonne des rayures (50-151) et la bande du corps
+ * (40-175) se répètent. --wp = taille d'un pixel de l'image (posée par main.ts).
  */
 :root {
   --wp: 1px; /* remplacé par main.ts selon l'écran */
@@ -1580,18 +1580,18 @@ body:not(.is-mobile) .desktop-icon a {
   z-index: 0;
   box-sizing: border-box;
   border-style: solid;
-  border-width: calc(var(--wp) * 34) calc(var(--wp) * 58) calc(var(--wp) * 13) calc(var(--wp) * 50);
-  border-image: url('/ui/window.png') 34 58 13 50 fill / calc(var(--wp) * 34) calc(var(--wp) * 58) calc(var(--wp) * 13) calc(var(--wp) * 50) repeat;
+  border-width: calc(var(--wp) * 40) calc(var(--wp) * 58) calc(var(--wp) * 20) calc(var(--wp) * 50);
+  border-image: url('/ui/window.png') 40 58 20 50 fill / calc(var(--wp) * 40) calc(var(--wp) * 58) calc(var(--wp) * 20) calc(var(--wp) * 50) repeat;
   image-rendering: pixelated;
   pointer-events: none;
 }
 /* Zone de contenu : recouvre l'intérieur sombre ET son trait noir (trop marqué autour d'un
-   contenu clair) ; il reste une marge blanche de 3 px du dessin de chaque côté. */
+   contenu clair) ; il reste la marge blanche du dessin (≈ 6 px) puis le cadre gris / noir. */
 .new-square > .border-inner-contener {
-  top: calc(var(--wp) * 33);
-  left: calc(var(--wp) * 9);
-  right: calc(var(--wp) * 9);
-  bottom: calc(var(--wp) * 9);
+  top: calc(var(--wp) * 39);
+  left: calc(var(--wp) * 17);
+  right: calc(var(--wp) * 16);
+  bottom: calc(var(--wp) * 16);
   width: auto;
   height: auto;
   transform: none;
@@ -1662,8 +1662,10 @@ body:not(.is-mobile) .desktop-icon a {
   background: rgba(0, 0, 0, 0.2);
 }
 .new-square .win-resize {
-  right: calc(var(--wp) * 6);
-  bottom: calc(var(--wp) * 6);
+  right: var(--wp);
+  bottom: var(--wp);
+  width: calc(var(--wp) * 8);
+  height: calc(var(--wp) * 8);
 }
 /* Le cadre dessiné entoure déjà le contenu : plus de liseré noir sur le bord du contenu,
    on garde seulement les séparations internes (en gris). */
