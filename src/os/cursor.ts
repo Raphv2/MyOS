@@ -2,9 +2,8 @@ import { isMobile } from '../core/device';
 import { h } from '../core/dom';
 
 /**
- * Curseur pixel (img/Cursor101.png) : c'est le système qui le dessine (CSS `cursor`, classe
- * `os-cursor` sur <html>), donc pas de retard. L'élément suit la souris seulement pour porter
- * l'étiquette qui affiche le nom de l'application survolée dans la barre des tâches.
+ * Curseur pixel (img/Cursor101.png) avec l'étiquette qui affiche le nom
+ * de l'application survolée dans la barre des tâches.
  */
 export class Cursor {
   private readonly el: HTMLDivElement;
@@ -19,7 +18,6 @@ export class Cursor {
     this.labelBox = h('div', { class: 'view_name_container', style: { display: 'none' } }, this.label);
     this.el = h('div', { class: 'custom_cursor', attrs: { 'aria-hidden': 'true' } }, this.labelBox);
     document.body.appendChild(this.el);
-    document.documentElement.classList.add('os-cursor');
     document.addEventListener('pointermove', this.onMove, { passive: true });
   }
 
@@ -45,7 +43,6 @@ export class Cursor {
 
   setVisible(visible: boolean): void {
     this.el.style.display = visible ? '' : 'none';
-    document.documentElement.classList.toggle('os-cursor-off', !visible);
   }
 
   showLabel(text: string): void {

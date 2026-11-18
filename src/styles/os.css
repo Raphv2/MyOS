@@ -2030,25 +2030,41 @@ body.is-mobile {
   --sb-face: #dcdcdc;
 }
 
-/* Terminaux : rail noir, curseur vert, bandes sombres au centre */
-.profile_terminal::-webkit-scrollbar {
+/* Terminaux : façon écran texte. Le rail est une trame « ░ » vert sombre, le curseur un bloc
+   « █ » vert plein, plus fin que le rail, marqué au centre d'un « ≡ ». Pas de biseau gris ici. */
+.profile_terminal::-webkit-scrollbar,
+.doc-terminal > .doc-scroll::-webkit-scrollbar {
   width: calc(10 * var(--sb-u));
+  height: calc(10 * var(--sb-u));
 }
 .profile_terminal::-webkit-scrollbar-track,
 .doc-terminal > .doc-scroll::-webkit-scrollbar-track {
-  background: var(--term-bg);
-  box-shadow: inset var(--sb-u) 0 0 rgba(93, 255, 143, 0.3);
+  background:
+    repeating-conic-gradient(rgba(93, 255, 143, 0.16) 0 25%, transparent 0 50%) 0 0 / calc(2 * var(--sb-u)) calc(2 * var(--sb-u)),
+    var(--term-bg);
+  box-shadow: none;
 }
 .profile_terminal::-webkit-scrollbar-thumb,
 .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb {
-  --sb-face: var(--term-dim);
-  --sb-grip: var(--term-bg);
-  --sb-grip-light: var(--term-green);
-  box-shadow: inset var(--sb-u) var(--sb-u) 0 #1d6b3a, inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #000, inset calc(2 * var(--sb-u)) calc(2 * var(--sb-u)) 0 var(--term-green), inset calc(-2 * var(--sb-u)) calc(-2 * var(--sb-u)) 0 #1d6b3a;
+  border: calc(2 * var(--sb-u)) solid transparent;
+  background:
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(-2 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(0 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(2 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    var(--term-dim);
+  background-clip: padding-box;
+  box-shadow: none;
 }
+.profile_terminal::-webkit-scrollbar-thumb:hover,
+.doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:hover,
 .profile_terminal::-webkit-scrollbar-thumb:active,
 .doc-terminal > .doc-scroll::-webkit-scrollbar-thumb:active {
-  --sb-face: var(--term-green);
+  background:
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(-2 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(0 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    linear-gradient(var(--term-bg), var(--term-bg)) 50% calc(50% + calc(2 * var(--sb-u))) / 100% var(--sb-u) no-repeat,
+    var(--term-green);
+  background-clip: padding-box;
 }
 .doc-terminal > .doc-scroll::-webkit-scrollbar-corner {
   background: var(--term-bg);
@@ -2067,20 +2083,75 @@ body:not(.is-mobile) .new-square .content2 > .list_folder {
   box-sizing: border-box;
 }
 
-/* ---------- Curseur : dessiné par le système (même image 32 px) ----------
- * Aucun retard sur aucun navigateur, et il suit aussi pendant qu'on tire une barre de
- * défilement. L'élément .custom_cursor ne sert plus qu'à l'étiquette de la barre des tâches.
+
+/* ---------- Curseurs (zoom des images / PDF, position et volume des lecteurs) ----------
+ * Même dessin que la barre de défilement : rail gris creusé, poignée avec le biseau des cadres
+ * et trois bandes gravées. Tailles en --sb-u (1 px sur PC, 2 px sur mobile).
  */
-html.os-cursor,
-html.os-cursor *,
-html.os-cursor *::before,
-html.os-cursor *::after {
-  cursor: url('/img/Cursor101.png') 0 0, default !important;
+.scale-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: calc(14 * var(--sb-u));
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: translateY(-50%);
 }
-html.os-cursor.os-cursor-off,
-html.os-cursor.os-cursor-off * {
-  cursor: none !important;
+.scale-slider::-webkit-slider-runnable-track {
+  height: calc(10 * var(--sb-u));
+  border: 0;
+  border-radius: 0;
+  background: #d6d6d6;
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #fff;
 }
-html.os-cursor .custom_cursor {
-  background-image: none;
+.scale-slider::-moz-range-track {
+  height: calc(10 * var(--sb-u));
+  border: 0;
+  border-radius: 0;
+  background: #d6d6d6;
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #fff;
+}
+.scale-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: calc(-2 * var(--sb-u)); /* centrée sur le rail */
+  width: calc(16 * var(--sb-u));
+  height: calc(14 * var(--sb-u));
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(-3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(-2 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(0 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(1 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(4 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    var(--os-bg);
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #000, inset calc(2 * var(--sb-u)) calc(2 * var(--sb-u)) 0 #fff, inset calc(-2 * var(--sb-u)) calc(-2 * var(--sb-u)) 0 rgb(130, 130, 130);
+  cursor: none;
+}
+.scale-slider::-moz-range-thumb {
+  width: calc(16 * var(--sb-u));
+  height: calc(14 * var(--sb-u));
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(-3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(-2 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(0 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(1 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(var(--os-ink), var(--os-ink)) calc(50% + calc(3 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    linear-gradient(#fff, #fff) calc(50% + calc(4 * var(--sb-u))) 50% / var(--sb-u) calc(7 * var(--sb-u)) no-repeat,
+    var(--os-bg);
+  box-shadow: inset var(--sb-u) var(--sb-u) 0 rgb(130, 130, 130), inset calc(-1 * var(--sb-u)) calc(-1 * var(--sb-u)) 0 #000, inset calc(2 * var(--sb-u)) calc(2 * var(--sb-u)) 0 #fff, inset calc(-2 * var(--sb-u)) calc(-2 * var(--sb-u)) 0 rgb(130, 130, 130);
+  cursor: none;
+}
+.scale-slider:active::-webkit-slider-thumb {
+  background-color: #dcdcdc;
+}
+.scale-slider:focus-visible {
+  outline: 1px dotted var(--os-ink);
+  outline-offset: 2px;
 }
