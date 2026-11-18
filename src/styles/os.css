@@ -1551,21 +1551,6 @@ body:not(.is-mobile) .desktop-icon a {
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
-/* Case où l'icône va se poser pendant le glisser-déposer */
-.desktop-cell-hint {
-  position: absolute;
-  z-index: 5;
-  border: 2px dashed rgba(239, 239, 239, 0.75);
-  border-radius: 4px;
-  background: rgba(239, 239, 239, 0.08);
-  pointer-events: none;
-}
-.desktop-cell-hint.is-blocked {
-  border-color: rgba(255, 90, 90, 0.8);
-}
-.desktop-cell-hint[hidden] {
-  display: none;
-}
 .top_widget {
   touch-action: none;
 }

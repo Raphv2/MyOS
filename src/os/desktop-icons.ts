@@ -41,7 +41,6 @@ export class DesktopIcons {
   private blocked = new Set<string>();
   private size = { w: 0, h: 0 };
   private raf = 0;
-  private readonly hint = h('div', { class: 'desktop-cell-hint', attrs: { hidden: true, 'aria-hidden': 'true' } });
 
   constructor(
     private readonly os: Os,
@@ -51,7 +50,6 @@ export class DesktopIcons {
     private readonly save: () => void,
     private readonly signal: AbortSignal,
   ) {
-    screen.appendChild(this.hint);
     onOpen(screen, '.desktop-icon', (el) => this.open(el), signal);
     screen.addEventListener('keydown', (e) => {
       const el = (e.target as Element).closest<HTMLElement>('.desktop-icon');
@@ -223,26 +221,16 @@ export class DesktopIcons {
           if (!moved) {
             moved = true;
             el.classList.add('is-dragging');
-            this.hint.hidden = false;
           }
           const x = ev.clientX - shiftX - sr.left;
           const y = ev.clientY - shiftY - sr.top;
           el.style.left = `${(x / sr.width) * 100}%`;
           el.style.top = `${(y / sr.height) * 100}%`;
           target = cellAt(g, x + r.width / 2, y + r.height / 2);
-          const hr = iconRect(g, target, this.size.w, this.size.h);
-          Object.assign(this.hint.style, {
-            left: `${(hr.x / sr.width) * 100}%`,
-            top: `${(hr.y / sr.height) * 100}%`,
-            width: `${(hr.w / sr.width) * 100}%`,
-            height: `${(hr.h / sr.height) * 100}%`,
-          });
-          this.hint.classList.toggle('is-blocked', this.blocked.has(cellKey(target)));
         };
 
         const up = () => {
           document.removeEventListener('pointermove', move);
-          this.hint.hidden = true;
           el.classList.remove('is-dragging');
           const g = this.grid;
           if (!moved || !g || !target) return;
