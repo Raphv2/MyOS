@@ -72,17 +72,5 @@ document.addEventListener('keydown', (e) => {
 
 window.addEventListener('popstate', () => go(pageFromUrl(), false));
 
-/**
- * Taille d'un pixel du cadre des fenêtres (public/ui/window.png, pixel-art 210×196).
- * Toujours un nombre entier de pixels de l'écran : le dessin reste net, sans déformation.
- */
-function updateWindowPixel(): void {
-  const dpr = window.devicePixelRatio || 1;
-  const px = isMobile ? 3 : Math.max(1, Math.round(window.innerHeight * 0.0012 * dpr)) / dpr;
-  document.documentElement.style.setProperty('--wp', `${px}px`);
-}
-window.addEventListener('resize', updateWindowPixel);
-updateWindowPixel();
-
 applyFullscreen(fullscreen);
 go(pageFromUrl(), false);

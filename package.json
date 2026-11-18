@@ -10,8 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "admin:password": "node scripts/admin-password.mjs",
-    "frame": "node scripts/slice-frame.mjs"
+    "admin:password": "node scripts/admin-password.mjs"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.3.0",
