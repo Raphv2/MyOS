@@ -5,7 +5,7 @@ import { runLink } from '../apps/link';
 import { projectLogoUrl } from '../apps/project-scan';
 import { LINKS, OWNER } from '../config';
 import { fetchTree } from '../core/api';
-import { gridConfig, isMobile } from '../core/device';
+import { iconCell, isMobile } from '../core/device';
 import { delay, h, img } from '../core/dom';
 import { VirtualFS } from '../core/fs';
 import { ICON } from '../core/icons';
@@ -13,10 +13,11 @@ import { clockEl, fullscreenTab, osLogo, topSeparator } from './chrome';
 import type { Os } from './context';
 import { Cursor } from './cursor';
 import { DesktopIcons } from './desktop-icons';
+import { loadLayout, saveLayout } from './layout-store';
 import { recents } from './recents';
 import type { ScreenEnv } from './screens';
 import { dropdown, startClock } from './ui';
-import { bioParagraph, contactWidget, eyeWidget, profileWidget } from './widgets';
+import { bioParagraph, contactWidget, enableWidgetDrag, eyeWidget, profileWidget } from './widgets';
 import { WindowManager } from './window-manager';
 
 export interface DesktopEnv extends ScreenEnv {
@@ -115,7 +116,19 @@ export function mountDesktop(root: HTMLElement, env: DesktopEnv): () => void {
   );
   root.appendChild(screen);
 
-  const icons = new DesktopIcons(os, screen, () => gridConfig(env.isFullscreen()), signal);
+  // Disposition du bureau mémorisée dans le navigateur (icônes + widgets).
+  const layout = loadLayout();
+  const saveDesktop = () => saveLayout(layout);
+  const icons = new DesktopIcons(os, screen, () => iconCell(env.isFullscreen()), layout, saveDesktop, signal);
+  enableWidgetDrag(
+    screen,
+    layout.widgets,
+    (final) => {
+      icons.relayout();
+      if (final) saveDesktop();
+    },
+    signal,
+  );
 
   // --- Interactions de la barre du haut
   dropdown(profileBtn, profileMenu, signal);

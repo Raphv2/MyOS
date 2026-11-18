@@ -31,20 +31,20 @@ export const LINKS: Record<string, { url: string; mobileUrl?: string; ascii: 'gi
   },
 };
 
-/** Grille des icônes du bureau (en vw/vh, relative à l'écran), reprise de l'ancien index.js. */
-export interface GridConfig {
-  minWidth: number;
-  maxWidth: number;
-  minHeight: number;
-  maxHeight: number;
-  stepWidth: number;
-  stepHeight: number;
+/**
+ * Taille visée d'une case de la grille du bureau, en vw / vh (comme le reste du CSS).
+ * La grille remplit l'écran avec autant de cases entières que possible : une icône par case.
+ */
+export interface IconCell {
+  cellW: number;
+  cellH: number;
 }
 
-export const GRID: Record<'tv' | 'fullscreen' | 'mobile', GridConfig> = {
-  tv: { minWidth: 0, maxWidth: 75, minHeight: 5, maxHeight: 60, stepWidth: 8, stepHeight: 10 },
-  fullscreen: { minWidth: 0, maxWidth: 90, minHeight: 10, maxHeight: 80, stepWidth: 8, stepHeight: 10 },
-  mobile: { minWidth: 0, maxWidth: 80, minHeight: 10, maxHeight: 70, stepWidth: 20, stepHeight: 10 },
+export const ICON_CELL: Record<'tv' | 'fullscreen' | 'mobile', IconCell> = {
+  tv: { cellW: 6.8, cellH: 12 },
+  fullscreen: { cellW: 6.8, cellH: 12 },
+  // Mobile : mêmes 5 colonnes qu'avant (la taille des icônes vient du CSS mobile d'origine).
+  mobile: { cellW: 19, cellH: 10 },
 };
 
 /** Nombre max de fichiers récents dans le menu Start. */

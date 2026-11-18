@@ -1,4 +1,4 @@
-import { GRID, type GridConfig } from '../config';
+import { ICON_CELL, type IconCell } from '../config';
 
 /** Même détection que l'ancien site (le CSS mobile repose aussi sur `pointer: coarse`). */
 export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -23,7 +23,7 @@ export function setFullscreenPref(value: boolean): void {
   }
 }
 
-export function gridConfig(fullscreen: boolean): GridConfig {
-  if (isMobile) return GRID.mobile;
-  return fullscreen ? GRID.fullscreen : GRID.tv;
+export function iconCell(fullscreen: boolean): IconCell {
+  if (isMobile) return ICON_CELL.mobile;
+  return fullscreen ? ICON_CELL.fullscreen : ICON_CELL.tv;
 }

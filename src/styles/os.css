@@ -1512,3 +1512,64 @@ body.is-fullscreen .full_screen {
   25% { translate: -6px; }
   75% { translate: 6px; }
 }
+
+/* ---------- Bureau : grille d'icônes et widgets déplaçables ---------- */
+.desktop-icon {
+  transition: left 0.25s ease, top 0.25s ease;
+}
+.desktop-icon.is-dragging {
+  transition: none;
+  z-index: 6;
+  opacity: 0.85;
+}
+/* PC : taille calculée par la grille (variables posées par desktop-icons.ts). Mobile : CSS d'origine. */
+body:not(.is-mobile) .desktop-icon {
+  width: var(--icon-w, 8vw);
+  height: var(--icon-h, 8vh);
+  justify-content: flex-start;
+  padding: 0;
+}
+body:not(.is-mobile) .desktop-icon:hover {
+  padding: 0;
+}
+body:not(.is-mobile) .desktop-icon img {
+  flex: none;
+  width: var(--icon-img, 4vw);
+  height: var(--icon-img, 4vw);
+  margin-bottom: var(--icon-gap, 0.6vh);
+  transition: transform 0.12s ease;
+}
+body:not(.is-mobile) .desktop-icon:hover img {
+  transform: scale(0.92);
+}
+body:not(.is-mobile) .desktop-icon a {
+  display: block;
+  height: auto;
+  max-height: 2.7em;
+  overflow: hidden;
+  font-size: var(--icon-font, 0.45vw);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+/* Case où l'icône va se poser pendant le glisser-déposer */
+.desktop-cell-hint {
+  position: absolute;
+  z-index: 5;
+  border: 2px dashed rgba(239, 239, 239, 0.75);
+  border-radius: 4px;
+  background: rgba(239, 239, 239, 0.08);
+  pointer-events: none;
+}
+.desktop-cell-hint.is-blocked {
+  border-color: rgba(255, 90, 90, 0.8);
+}
+.desktop-cell-hint[hidden] {
+  display: none;
+}
+.top_widget {
+  touch-action: none;
+}
+.widget.is-dragging {
+  transition: none;
+  z-index: 3;
+}

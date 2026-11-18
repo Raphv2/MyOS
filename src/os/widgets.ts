@@ -1,4 +1,5 @@
 import { OWNER } from '../config';
+import { isMobile } from '../core/device';
 import { h, img } from '../core/dom';
 
 function widget(id: string, title: string, bodyId: string, ...content: Node[]): HTMLDivElement {
@@ -9,8 +10,74 @@ function widget(id: string, title: string, bodyId: string, ...content: Node[]): 
     h('div', { class: 'top_widget' }, close, h('div', { class: 'application_name', text: title })),
     h('div', { id: bodyId, class: 'border-inner-contener widget-body' }, ...content),
   );
-  close.addEventListener('click', () => el.remove());
+  close.addEventListener('click', () => {
+    el.remove();
+    window.dispatchEvent(new Event('myos:layout')); // les icônes reprennent la place libérée
+  });
   return el;
+}
+
+/**
+ * Widgets déplaçables par leur barre de titre (PC), position mémorisée en % de l'écran.
+ * `onMove(final)` est appelé pendant le déplacement (final = false) et au lâcher (true).
+ */
+export function enableWidgetDrag(
+  screen: HTMLElement,
+  saved: Record<string, [number, number]>,
+  onMove: (final: boolean) => void,
+  signal: AbortSignal,
+): void {
+  if (isMobile) return; // sur mobile, le CSS d'origine place le widget contact
+  for (const [id, [left, top]] of Object.entries(saved)) {
+    const w = document.getElementById(id);
+    if (w?.classList.contains('widget') && screen.contains(w)) {
+      w.style.left = `${left}%`;
+      w.style.top = `${top}%`;
+    }
+  }
+
+  screen.addEventListener(
+    'pointerdown',
+    (e) => {
+      const target = e.target as Element;
+      const bar = target.closest<HTMLElement>('.top_widget');
+      const w = bar?.closest<HTMLElement>('.widget');
+      if (!bar || !w || e.button !== 0 || target.closest('.close-btn')) return;
+      e.preventDefault();
+      const sr = screen.getBoundingClientRect();
+      const r = w.getBoundingClientRect();
+      const topBar = screen.querySelector('.rectangular-bar-top')?.getBoundingClientRect();
+      const minTop = topBar && topBar.height ? topBar.bottom - sr.top : 0;
+      const shiftX = e.clientX - r.left;
+      const shiftY = e.clientY - r.top;
+      let left = ((r.left - sr.left) / sr.width) * 100;
+      let top = ((r.top - sr.top) / sr.height) * 100;
+      bar.setPointerCapture(e.pointerId);
+      w.classList.add('is-dragging');
+
+      const move = (ev: PointerEvent) => {
+        const x = Math.min(Math.max(ev.clientX - shiftX - sr.left, 0), sr.width - r.width);
+        const y = Math.min(Math.max(ev.clientY - shiftY - sr.top, minTop), sr.height - r.height);
+        left = (x / sr.width) * 100;
+        top = (y / sr.height) * 100;
+        w.style.left = `${left}%`;
+        w.style.top = `${top}%`;
+        onMove(false);
+      };
+      const up = () => {
+        bar.removeEventListener('pointermove', move);
+        bar.removeEventListener('pointerup', up);
+        bar.removeEventListener('pointercancel', up);
+        w.classList.remove('is-dragging');
+        saved[w.id] = [Math.round(left * 100) / 100, Math.round(top * 100) / 100];
+        onMove(true);
+      };
+      bar.addEventListener('pointermove', move);
+      bar.addEventListener('pointerup', up);
+      bar.addEventListener('pointercancel', up);
+    },
+    { signal },
+  );
 }
 
 export function bioParagraph(): HTMLParagraphElement {
